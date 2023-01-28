@@ -5,100 +5,154 @@ const ObjectId = require('mongodb').ObjectId;
 //heartbeat
 function returnHeartbeat(req, res) {
 
-    const return_value = "Hero DB is ready to rock!"
+    const return_value = "Hero DB has completed a hero landing and ready to go!"
     //return data
     setHeaders(res);
     res.status(200).send(return_value);
+}
 
-    }
 // gets names and ids for all heroes
 async function getNamesAndIds(req, res) {
 
-    //get data
-    const dbo = mongoDB.getDB().db("heroes");
-    const result = await dbo.collection("heroes").find({}, { projection: {id: 1,name: 1, _id: 0}}).toArray();
-    setHeaders(res);
-    res.status(200).send(result);
+    try {
+        //get db
+        const dbo = mongoDB.getDB().db("heroes");
+
+        //get data
+        const result = await dbo.collection("heroes").find({}, 
+        { projection: {id: 1,name: 1, _id: 0}}).toArray();
+            setHeaders(res);
+            res.status(200).send(result);
+    } catch (err) {
+        console.log(err);
+        res.status(500).send(err);
+        }  
 }
 
 
 // gets one contact from database depending on id provided
 async function getHero(req, res) {
 
-    //get id from request object
-    const heroId = parseInt(req.params.id);
-    
-    //get data
-    const dbo = mongoDB.getDB().db("heroes");
-    dbo.collection("heroes").findOne({ id: heroId }, (err, result) => {
-        if (err) 
-          return err;
-        else 
-            //return data
-            setHeaders(res);
-            res.status(200).send(result);
-    });
+    try {
+
+        //get id from request object
+        const heroId = parseInt(req.params.id);
+        
+        //get data
+        const dbo = await mongoDB.getDB().db("heroes");
+        dbo.collection("heroes").findOne({ id: heroId }, (err, result) => {
+            if (err) 
+            return err;
+            else 
+                //return data
+                setHeaders(res);
+                res.status(200).send(result);
+        });
+    } catch (err) {
+        console.log(err);
+        res.status(500).send(err);
+    }
 }
 
-// // creates a new contact with the data provided
-// async function createNewContact(req, res) {
+// creates a new hero with the data provided
+async function createNewHero(req, res) {
 
-//     //get new contact data from request object
-//     const newUser = req.body;
+    try {
 
-//     // create user in database
-//     const db = mongoDB.getDB().db("Contacts");
-//     db.collection("contacts").insertOne(newUser, (err, result) => {
-//         if (err) 
-//           return err;
-//         else 
-//             setHeaders(res);
-//             res.status(201).send(result);
-//     });
+         //get new hero data from request object
+        const newUser =req.body;
 
-//     //return data
-// }
+        //get db
+        const db = mongoDB.getDB().db("heroes");
 
-// // replaces a contact based on the id provided
-// async function updateContact(req, res) {
+        //get new id number
+        const newId = await db.collection("heroes").find(
+            {}, 
+            { projection: { id: 1, _id: 0} })
+            .sort({ id: -1})
+            .limit(1).toArray();
 
-//     //get id from request object
-//     const userId = new ObjectId(req.params.id);
-    
-//     //get new contact data from request object
-//     const updatedUser = req.body;
+        newUser['id'] = newId[0]['id'] + 1;
+        
 
-//     //update contact
-//     const db = mongoDB.getDB().db("heroes");
-//     db.collection("heroes").replaceOne({_id: userId}, updatedUser, (err, result) => {
-//         if (err) 
-//           return err;
-//         else 
-//             //return data
-//             setHeaders(res);
-//             res.status(204).send('');
-//     });
-// }
+        // create user in database
+        await db.collection("heroes").insertOne(newUser, (err, result) => {
+            if (err) {
+                console.log(err);
+                return err;
+            }
+            else  {
+                setHeaders(res);
+                delete result['insertedId'];
+                //return new id number
+                result['id'] = newUser['id'];
+                res.status(201).send(result);
+            }
+        });
+    } catch (err) {
+        console.log(err);
+        res.status(500).send(err);
+    }
+}
 
+// replaces a hero based on the id provided
+async function updateHero(req, res) {
 
-// // deletes a contact based on the id provided
-// async function deleteContact(req, res) {
+    try {
+        //get id from request object
+        const heroId = parseInt(req.params.id);
+        
+        //get new hero data from request object
+        const updatedHero = req.body;
 
-//     //get id from request object
-//     const userId = new ObjectId(req.params.id);
-    
-//     //update contact
-//     const db = mongoDB.getDB().db("Contacts");
-//     db.collection("contacts").deleteOne({_id: userId}, (err, result) => {
-//         if (err) 
-//           return err;
-//         else 
-//             //return data
-//             setHeaders(res);
-//             res.status(200).send('');
-//     });
-// }
+        // if the hero id is missing from the data, add it.
+        if (updatedHero['id'] == null) {
+            updatedHero['id'] = heroId;
+        }
 
+        //update contact
+        const db = mongoDB.getDB().db("heroes");
+        await db.collection("heroes").replaceOne({ id: heroId }, updatedHero, (err, result) => {
+
+            if (err) {
+                console.log(err);
+                return err;
+            }
+            else  {
+                // return result
+                setHeaders(res);
+                res.status(204).send('');
+            }
+        })
+     } catch (err) {
+        console.log(err);
+        res.status(500).send(err);
+    }
+}
+
+// delete one here from database depending on id provided
+async function deleteHero(req, res) {
+
+    try {
+
+        //get id from request object
+        const heroId = parseInt(req.params.id);
+        
+        //get data
+        const dbo = mongoDB.getDB().db("heroes");
+        await dbo.collection("heroes").deleteOne({ id: heroId }, (err, result) => {
+            if (err) 
+            return err;
+            else 
+                //return data
+                setHeaders(res);
+                res.status(200).send(result);
+        });
+    } catch (err) {
+        console.log(err);
+        res.status(500).send(err);
+    }
+}
 
 // sets the headers for the response
 function setHeaders(res) {
@@ -110,4 +164,4 @@ function setHeaders(res) {
     
 }
 
-module.exports = { returnHeartbeat, getNamesAndIds, getHero } //, getHeroById, addHero, updateHero, deleteHero };
+module.exports = { returnHeartbeat, getNamesAndIds, getHero, createNewHero, updateHero, deleteHero } ;

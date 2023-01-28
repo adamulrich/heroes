@@ -34,47 +34,47 @@ router.get('/hero/:id',
     dataController.getHero);
 
 
-// router.post('/', 
-//     // #swagger.summary = 'creates a contact in the db'
-//     // #swagger.description = 'creates a contact in the db'
-//     /* #swagger.responses[201] = {
-//             description: 'OK',
-//             schema: { $ref: '#definitions/insertionSuccess' }
-//              }
-//     }
-//     */
-//     /*  #swagger.parameters['obj'] = {
-//                 in: 'body',
-//                 description: 'Add a user',
-//                 schema: { $ref: '#/definitions/newContact' }
-//         } */
-//     dataController.createNewContact);
+router.post('/hero', 
+    // #swagger.summary = 'add a hero to the db'
+    // #swagger.description = 'add a hero to the db'
+    /* #swagger.responses[201] = {
+            description: 'OK',
+            schema: { $ref: '#definitions/insertionSuccess' }
+             }
+    }
+    */
+    /*  #swagger.parameters['obj'] = {
+                in: 'body',
+                description: 'Add a user',
+                schema: { $ref: '#/definitions/newContact' }
+        } */
+    dataController.createNewHero);
 
-// router.put("/:id", 
-//     // #swagger.summary = 'replaces a contact in the db based on ID'
-//     // #swagger.description = 'replaces a contact in the db based on ID'
-//     /* #swagger.responses[204] = {
-//             description: 'OK',
-//              }
-//     }
-//     */
-//     /*  #swagger.parameters['obj'] = {
-//                 in: 'body',
-//                 description: 'Replace contact info',
-//                 schema: { $ref: '#/definitions/newContact' }
-//         } */
+router.put("/hero/:id", 
+    // #swagger.summary = 'replaces a contact in the db based on ID'
+    // #swagger.description = 'replaces a contact in the db based on ID'
+    /* #swagger.responses[204] = {
+            description: 'OK',
+             }
+    }
+    */
+    /*  #swagger.parameters['obj'] = {
+                in: 'body',
+                description: 'Replace contact info',
+                schema: { $ref: '#/definitions/newContact' }
+        } */
 
-//     dataController.updateContact);
+    dataController.updateHero);
 
-// router.delete("/:id", 
-//     // #swagger.summary = 'deletes a contact from the db based on ID.'
-//     // #swagger.description = 'deletes a contact from the db based on ID.'
-//     // #swagger.parameters['id'] = { description: 'Contact Id' }
-//     /* #swagger.responses[200] = {
-//             description: 'OK',
-//              }
-//     }
-//     */
-//     dataController.deleteContact);
+router.delete("/hero/:id", 
+    // #swagger.summary = 'deletes a contact from the db based on ID.'
+    // #swagger.description = 'deletes a contact from the db based on ID.'
+    // #swagger.parameters['id'] = { description: 'Contact Id' }
+    /* #swagger.responses[200] = {
+            description: 'OK',
+             }
+    }
+    */
+    dataController.deleteHero);
 
 module.exports = router;

@@ -4,6 +4,8 @@ const connectionString = process.env.MONGO_CONNECT_STRING;
 const port = process.env.PORT;
 const swaggerUI = require("swagger-ui-express");
 const cors = require('cors')
+const logger = require('morgan');
+const { auth } = require('express-openid-connect');
 
 // mongoDB
 const mongoDB = require('./dbconnect');
@@ -13,8 +15,12 @@ mongoDB.initDB();
 const express = require('express')
 const app = express();
 
+// logger
+app.use(logger('dev'));
+
 //routes
 app.use(cors());
+// app.use(auth(config));
 app.use(express.json());
 
 const swaggerSpec = require('./swagger-output.json');
