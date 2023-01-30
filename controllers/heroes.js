@@ -1,3 +1,4 @@
+const { exit } = require('process');
 const mongoDB = require('../dbconnect');
 const ObjectId = require('mongodb').ObjectId;
 
@@ -68,12 +69,17 @@ async function getHero(req, res) {
         //get data
         const dbo = await mongoDB.getDB().db("heroes");
         dbo.collection("heroes").findOne({ id: heroId }, (err, result) => {
-            if (err) 
-            return err;
-            else 
-                //return data
-                setHeaders(res);
-                res.status(200).send(result);
+            if (err)
+                return err;
+            else
+                if (result == null) {
+                    setHeaders(res);
+                    res.status(404).send(result);
+                } else {
+                    //return data
+                    setHeaders(res);
+                    res.status(200).send(result);
+                }
         });
     } catch (err) {
         console.log(err);
@@ -180,12 +186,17 @@ async function deleteHero(req, res) {
         //get data
         const dbo = mongoDB.getDB().db("heroes");
         await dbo.collection("heroes").deleteOne({ id: heroId }, (err, result) => {
-            if (err) 
-            return err;
-            else 
-                //return data
-                setHeaders(res);
-                res.status(200).send(result);
+            if (err)
+                return err;
+            else
+                if (result.deletedCount == 0) {
+                    setHeaders(res);
+                    res.status(404).send(result);
+                } else {
+                    //return data
+                    setHeaders(res);
+                    res.status(200).send(result);
+                }
         });
     } catch (err) {
         console.log(err);
@@ -207,29 +218,29 @@ function setHeaders(res) {
 function allKeysExist(template, newHero) {
 
     //check root keys
-    if (keysExist(template, newHero) === false) {
-        return false;
-    }
-
+    let returnFlag = keysExist(template, newHero)
+        
     //check other keys
     const keyList = ['powerstats', 'biography', 'appearance', 'work', 'connections', 'image']
     keyList.forEach  ( key => {
         if (keysExist(template[key], newHero[key]) === false) {
-            return false;
+            returnFlag = false;
         }
     })
+    return returnFlag;
 }
 
 function keysExist(template, newHero) {
+    let returnFlag = true;
     Object.keys(template).forEach(key => {
         if (key in newHero == false) {
-            return false;
-        }
+            returnFlag = false;
+            }
     })
     if (Object.keys(template).length != Object.keys(newHero).length) {
-        return false;
+        returnFlag = false;
     }
-    return true
+    return returnFlag;
 }
 
 const heroTemplate = {
