@@ -248,8 +248,6 @@ async function getPrivData(sub,priv) {
     return returnValue;
 }
 
-
-
 function allKeysExist(template, newHero) {
 
     //check root keys
