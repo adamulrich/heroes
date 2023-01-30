@@ -21,26 +21,16 @@ const app = express();
 const { auth } = require('express-openid-connect');
 
 const config = {
-    explorer: false,
-    swaggerOptions: {
-        oauth: {
-            authRequired: true,
-            auth0Logout: true,
-            clientId: 'Sd3qo6O9oO416v1CqERcSTuYKDnysHli',
-            clientSecret: 'asdfasdfkljasdfjklasjkl;dfj;klasjkd;lf132j42kl34kjl23wEC2323423423424123ASDFASDFAVAFVALKJAKL;DFJA',
-            appName: "v1.0",
-            baseURL: 'http://localhost:3000',
-            issuerBaseURL: 'https://dev-vukawrenb1tvjct0.us.auth0.com',
-            scopeSeparator: ',',
-			additionalQueryStringParams: {}			
-
-        }
-    }
-}
+    authRequired: false,
+    auth0Logout: true,
+    secret: process.env.SECRET,
+    baseURL: process.env.BASE_URL,
+    clientID: process.env.CLIENT_ID,
+    issuerBaseURL: process.env.ISSUER_BASE_URL
+  };
   
-
   
-//  app.use(auth(config));
+ app.use(auth(config));
 
 // logger
 app.use(logger('dev'));
@@ -50,7 +40,8 @@ app.use(cors());
 app.use(express.json());
 
 const swaggerSpec = require('./swagger-output.json');
-app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerSpec, config));
+const { env } = require('process');
+app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerSpec));
 
 app.use('/', require('./routes/heroes'));
 
