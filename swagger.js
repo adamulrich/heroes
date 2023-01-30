@@ -41,7 +41,6 @@ const doc = {
   },
   definitions: {
     hero: {
-    id: 0,
     name: "Grogu",
     powerstats: {
       intelligence: 40,
@@ -78,7 +77,7 @@ const doc = {
     }
   },
   addHero: {
-    name: "Grogu",
+    name: "Baby Yoda",
     powerstats: {
       intelligence: 40,
       strength: 30,
@@ -88,9 +87,9 @@ const doc = {
       combat: 50
     },
     biography: {
-      "full-name": "Grogu",
+      "full-name": "Baby Yoda",
       "alter-egos": "No alter egos found.",
-      aliases: ["The Child", "Baby Yoda"],
+      aliases: ["The Child"],
       "place-of-birth": "-",
       "first-appearance": "The Mandalorian (2019)",
       publisher: "George Lucas",

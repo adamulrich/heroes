@@ -79,7 +79,7 @@
             "in": "body",
             "description": "Replace hero info",
             "schema": {
-              "$ref": "#/definitions/addHero"
+              "$ref": "#/definitions/hero"
             }
           }
         ],
@@ -162,10 +162,6 @@
     "hero": {
       "type": "object",
       "properties": {
-        "id": {
-          "type": "number",
-          "example": 0
-        },
         "name": {
           "type": "string",
           "example": "Grogu"
@@ -321,7 +317,7 @@
       "properties": {
         "name": {
           "type": "string",
-          "example": "Grogu"
+          "example": "Baby Yoda"
         },
         "powerstats": {
           "type": "object",
@@ -357,7 +353,7 @@
           "properties": {
             "full-name": {
               "type": "string",
-              "example": "Grogu"
+              "example": "Baby Yoda"
             },
             "alter-egos": {
               "type": "string",
@@ -366,8 +362,7 @@
             "aliases": {
               "type": "array",
               "example": [
-                "The Child",
-                "Baby Yoda"
+                "The Child"
               ],
               "items": {
                 "type": "string"

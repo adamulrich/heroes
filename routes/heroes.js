@@ -94,7 +94,7 @@ router.put("/hero/:id", (req, res) => {
     /*  #swagger.parameters['obj'] = {
                 in: 'body',
                 description: 'Replace hero info',
-                schema: { $ref: '#/definitions/addHero' }
+                schema: { $ref: '#/definitions/hero' }
         } */
 
         dataController.updateHero(req, res);
@@ -113,10 +113,10 @@ router.delete("/hero/:id", (req, res) => {
              }
     }
     */
-    dataController.deleteHero(req, res);
-} else {
-    res.status(401).send("not logged in");
-}
+        dataController.deleteHero(req, res);
+    } else {
+        res.status(401).send("not logged in");
+    }
 });
 
 module.exports = router;
