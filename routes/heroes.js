@@ -2,6 +2,15 @@
 const router = require('express').Router();
 const dataController = require('../controllers/heroes');
 
+// req.isAuthenticated is provided from the auth router
+router.get('/profile', (req, res) => {
+  if (req.oidc.isAuthenticated()) {
+    res.send(JSON.stringify(req.oidc.user));
+  } else {
+    res.status(401).send("not logged in");
+  }
+});
+
 router.get('/',
     // #swagger.summary = 'returns ok if the service is running'
     // #swagger.description = 'returns ok if the service is running'
@@ -34,47 +43,70 @@ router.get('/hero/:id',
     dataController.getHero);
 
 
-router.post('/hero', 
-    // #swagger.summary = 'add a hero to the db'
-    // #swagger.description = 'add a hero to the db'
-    /* #swagger.responses[201] = {
-            description: 'OK',
-            schema: { $ref: '#definitions/insertionSuccess' }
-             }
-    }
-    */
-    /*  #swagger.parameters['obj'] = {
+router.post('/hero', (req, res) => {
+    if (req.oidc.isAuthenticated()) {
+        /* #swagger.security = [{
+            "oAuth2Implicit": [
+            "write"
+            ]
+        }]
+        */
+        // #swagger.summary = 'add a hero to the db'
+        // #swagger.description = 'add a hero to the db'
+        /* #swagger.responses[201] = {
+                description: 'OK',
+                schema: { $ref: '#definitions/insertionSuccess' }
+                }
+        }
+        */
+        /*  #swagger.parameters['obj'] = {
                 in: 'body',
                 description: 'Add a user',
-                schema: { $ref: '#/definitions/newContact' }
-        } */
-    dataController.createNewHero);
+                schema: { $ref: '#/definitions/addHero' }
+            } */
+            
+        dataController.createNewHero(req, res); 
+    } else {
+        res.status(401).send("not logged in");
+    }
+});
 
-router.put("/hero/:id", 
-    // #swagger.summary = 'replaces a contact in the db based on ID'
-    // #swagger.description = 'replaces a contact in the db based on ID'
+
+router.put("/hero/:id", (req, res) => {
+    if (req.oidc.isAuthenticated()) {
+    // #swagger.summary = 'replaces a hero in the db based on ID'
+    // #swagger.description = 'replaces a hero in the db based on ID'
     /* #swagger.responses[204] = {
             description: 'OK',
              }
     }
-    */
+    */ 
     /*  #swagger.parameters['obj'] = {
                 in: 'body',
-                description: 'Replace contact info',
-                schema: { $ref: '#/definitions/newContact' }
+                description: 'Replace hero info',
+                schema: { $ref: '#/definitions/addHero' }
         } */
 
-    dataController.updateHero);
+        dataController.updateHero(req, res);
+    } else {
+        res.status(401).send("not logged in");
+    }
+});
 
-router.delete("/hero/:id", 
-    // #swagger.summary = 'deletes a contact from the db based on ID.'
-    // #swagger.description = 'deletes a contact from the db based on ID.'
-    // #swagger.parameters['id'] = { description: 'Contact Id' }
+router.delete("/hero/:id", (req, res) => {
+    if (req.oidc.isAuthenticated()) {
+    // #swagger.summary = 'deletes a hero from the db based on ID.'
+    // #swagger.description = 'deletes a hero from the db based on ID.'
+    // #swagger.parameters['id'] = { description: 'hero Id' }
     /* #swagger.responses[200] = {
             description: 'OK',
              }
     }
     */
-    dataController.deleteHero);
+    dataController.deleteHero(req, res);
+} else {
+    res.status(401).send("not logged in");
+}
+});
 
 module.exports = router;

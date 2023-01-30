@@ -4,7 +4,9 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test": "nodemon server.js"
+    "test": "nodemon server.js",
+    "build": "npm run build",
+    "swagger-autogen": "node swagger.js"
   },
   "repository": {
     "type": "git",
@@ -21,14 +23,14 @@
     "dotenv": "^16.0.3",
     "ejs": "^3.1.8",
     "express": "^4.18.2",
-    "express-oauth2-jwt-bearer": "^1.3.0",
+    "express-jwt": "^8.4.0",
     "express-openid-connect": "^2.12.0",
     "http-errors": "~1.8.1",
+    "jwks-rsa": "^3.0.1",
     "mongodb": "^4.13.0",
     "mongoose": "^6.9.0",
     "morgan": "~1.10.0",
     "node": "^18.13.0",
-    "nodemon": "^2.0.20",
     "swagger-autogen": "^2.22.0",
     "swagger-ui-express": "^4.6.0"
   }

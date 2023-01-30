@@ -1,0 +1,14 @@
+{
+    "cSpell.words": [
+        "dbconnect",
+        "jwks"
+    ],
+    "rest-client.environmentVariables": {
+        "local": {
+            "identityAuthority": "https://localhost:3000/login",
+            "baseUrl": "localhost:3000",
+            "credential": "",
+            "token": ""
+        }
+    }
+}

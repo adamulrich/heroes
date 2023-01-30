@@ -3,7 +3,7 @@ const swaggerAutogen = require('swagger-autogen')();
 const doc = {
   info: {
     version: '',      // by default: '1.0.0'
-    title: 'CONTACTS REST API',        // by default: 'REST API'
+    title: 'HEROES REST API',        // by default: 'REST API'
     description: '',  // by default: ''
   },
   host: '',      // by default: 'localhost:3000'
@@ -20,7 +20,25 @@ const doc = {
   ],
   securityDefinitions: {},  // by default: empty object
   definitions: {},          // by default: empty object (Swagger 2.0)
-  components: {},            // by default: empty object (OpenAPI 3.x)
+  components: {
+    securitySchemes: {
+      oAuth2Implicit: {
+        type: 'oauth2',
+        flow: 'implicit',
+        scopes: {
+          read: 'Grant read-only access to all your data except for the account and user info',
+          write: 'Grant write-only access to all your data except for the account and user info',
+          profile: 'Grant read-only access to the account and user info only'
+        }
+      }
+    }
+  },
+  security: {
+    oAuth2Implicit: {
+      write: 'write',
+      read: 'read'
+    }
+  },
   definitions: {
     hero: {
     id: 0,
@@ -98,7 +116,21 @@ const doc = {
   heroNameAndId: {
     id: 0,
     name: "Grogu"
+  },
+  insertionSuccess: {
+    type: "object",
+    properties: {
+      acknowledged: {
+        type: "boolean",
+        example: true
+      },
+      insertedId: {
+        type: "string",
+        example: "<24 char guid>"
+      }
+    }
   }
+
 
   }
 };
@@ -111,3 +143,18 @@ const endpointsFiles = ['./server.js'];
    such as: index.js, app.js, routes.js, ... */
 
 swaggerAutogen(outputFile, endpointsFiles, doc);
+
+
+// oAuthSample: { 
+//   type: 'oauth2',
+//   description: 'This API uses OAuth 2 with the implicit grant flow.',
+//   flows: {
+//     implicit:  { //flow(authorizationCode, implicit, password or clientCredentials),
+//       authorizationUrl: 'https://domain.auth0.com/authorize',
+//       scopes: {
+//         writer: 'write new data to heroes',
+//         reader: 'can read data from heroes' 
+//       }
+//     }
+//  }
+// }

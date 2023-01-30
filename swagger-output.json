@@ -2,7 +2,7 @@
   "swagger": "2.0",
   "info": {
     "version": "1.0.0",
-    "title": "CONTACTS REST API",
+    "title": "HEROES REST API",
     "description": ""
   },
   "host": "",
@@ -16,6 +16,20 @@
   "schemes": [],
   "securityDefinitions": {},
   "paths": {
+    "/profile": {
+      "get": {
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
     "/": {
       "get": {
         "summary": "returns ok if the service is running",
@@ -45,6 +59,9 @@
                 "name": "main"
               }
             }
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       }
@@ -67,8 +84,103 @@
             "schema": {
               "$ref": "#/definitions/hero"
             }
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
+      },
+      "put": {
+        "summary": "replaces a hero in the db based on ID",
+        "description": "replaces a hero in the db based on ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "description": "Replace hero info",
+            "schema": {
+              "$ref": "#/definitions/addHero"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "delete": {
+        "summary": "deletes a hero from the db based on ID.",
+        "description": "deletes a hero from the db based on ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "hero Id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/hero": {
+      "post": {
+        "summary": "add a hero to the db",
+        "description": "add a hero to the db",
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "description": "Add a user",
+            "schema": {
+              "$ref": "#/definitions/addHero"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/insertionSuccess"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "oAuth2Implicit": [
+              "write"
+            ]
+          }
+        ]
       }
     }
   },
@@ -80,6 +192,159 @@
           "type": "number",
           "example": 0
         },
+        "name": {
+          "type": "string",
+          "example": "Grogu"
+        },
+        "powerstats": {
+          "type": "object",
+          "properties": {
+            "intelligence": {
+              "type": "number",
+              "example": 40
+            },
+            "strength": {
+              "type": "number",
+              "example": 30
+            },
+            "speed": {
+              "type": "number",
+              "example": 33
+            },
+            "durability": {
+              "type": "number",
+              "example": 25
+            },
+            "power": {
+              "type": "number",
+              "example": 50
+            },
+            "combat": {
+              "type": "number",
+              "example": 50
+            }
+          }
+        },
+        "biography": {
+          "type": "object",
+          "properties": {
+            "full-name": {
+              "type": "string",
+              "example": "Grogu"
+            },
+            "alter-egos": {
+              "type": "string",
+              "example": "No alter egos found."
+            },
+            "aliases": {
+              "type": "array",
+              "example": [
+                "The Child",
+                "Baby Yoda"
+              ],
+              "items": {
+                "type": "string"
+              }
+            },
+            "place-of-birth": {
+              "type": "string",
+              "example": "-"
+            },
+            "first-appearance": {
+              "type": "string",
+              "example": "The Mandalorian (2019)"
+            },
+            "publisher": {
+              "type": "string",
+              "example": "George Lucas"
+            },
+            "alignment": {
+              "type": "string",
+              "example": "good"
+            }
+          }
+        },
+        "appearance": {
+          "type": "object",
+          "properties": {
+            "gender": {
+              "type": "string",
+              "example": "Male"
+            },
+            "race": {
+              "type": "string",
+              "example": "Yoda's species"
+            },
+            "height": {
+              "type": "array",
+              "example": [
+                "1'1",
+                "34 cm"
+              ],
+              "items": {
+                "type": "string"
+              }
+            },
+            "weight": {
+              "type": "array",
+              "example": [
+                "19 lb",
+                "17 kg"
+              ],
+              "items": {
+                "type": "string"
+              }
+            },
+            "eye-color": {
+              "type": "string",
+              "example": "Brown"
+            },
+            "hair-color": {
+              "type": "string",
+              "example": "White"
+            }
+          }
+        },
+        "work": {
+          "type": "object",
+          "properties": {
+            "occupation": {
+              "type": "string",
+              "example": "-"
+            },
+            "base": {
+              "type": "string",
+              "example": "-"
+            }
+          }
+        },
+        "connections": {
+          "type": "object",
+          "properties": {
+            "group-affiliation": {
+              "type": "string",
+              "example": ""
+            },
+            "relatives": {
+              "type": "string",
+              "example": ""
+            }
+          }
+        },
+        "image": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "example": "https://static.wikia.nocookie.net/starwars/images/4/43/TheChild-Fathead.png/revision/latest?cb=20201031231040"
+            }
+          }
+        }
+      }
+    },
+    "addHero": {
+      "type": "object",
+      "properties": {
         "name": {
           "type": "string",
           "example": "Grogu"
@@ -242,6 +507,65 @@
           "example": "Grogu"
         }
       }
+    },
+    "insertionSuccess": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "example": "object"
+        },
+        "properties": {
+          "type": "object",
+          "properties": {
+            "acknowledged": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "example": "boolean"
+                },
+                "example": {
+                  "type": "boolean",
+                  "example": true
+                }
+              }
+            },
+            "insertedId": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "example": "string"
+                },
+                "example": {
+                  "type": "string",
+                  "example": "<24 char guid>"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "oAuth2Implicit": {
+        "type": "oauth2",
+        "flow": "implicit",
+        "scopes": {
+          "read": "Grant read-only access to all your data except for the account and user info",
+          "write": "Grant write-only access to all your data except for the account and user info",
+          "profile": "Grant read-only access to the account and user info only"
+        }
+      }
+    }
+  },
+  "security": {
+    "oAuth2Implicit": {
+      "write": "write",
+      "read": "read"
     }
   }
 }
