@@ -5,10 +5,12 @@
     ],
     "rest-client.environmentVariables": {
         "local": {
-            "identityAuthority": "https://localhost:3000/login",
+            "identityAuthority": "http://localhost:3000/login",
             "baseUrl": "localhost:3000",
-            "credential": "",
-            "token": ""
+            "issuerBaseUrl": "https://dev-vukawrenb1tvjct0.us.auth0.com",
+            "clientId": "Sd3qo6O9oO416v1CqERcSTuYKDnysHli",
+            "secret": "qW2jELYwTbM0XFVa2banBxF6YShyrb2vraGVoipfEFDW7oK9fl7NJpYVrH10X-qd",
+            "credential": ""
         }
     }
 }

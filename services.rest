@@ -1,18 +1,28 @@
-# @name login
-
-
-
-
-
-
 // localhost
-@hostname = localhost:3000
-# @hostname = adamu341test.onrender.com
+# @hostname = localhost:3000
+@hostname = hero-service.onrender.com
 
 @id = 38
 @createUpdateDeleteId = 731
 
 ### service heartbeat
+
+# @name login
+POST http://localhost:3000/login HTTP/1.1
+Content-Type: application/x-www-form-urlencoded
+Authorization: {{credential}}
+
+grant_type=client_credentials
+&client_id={{clientId}}
+&client_secret={{secret}}
+
+
+###
+GET https://{baseUrl}/api/endpoint HTTP/1.1
+Authorization: Bearer {{login.response.body.access_token}}
+
+
+
 GET http://{{hostname}}
 
 
