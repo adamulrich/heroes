@@ -29,7 +29,7 @@ function getDB() {
         return mongoDB
     } else {
         initDB()
-        //console.log("db not initialized yet.")
+        console.log("db not initialized yet.")
         return mongoDB
     }
 }

@@ -9,7 +9,8 @@ router.get('/profile', (req, res) => {
         res.render('profile', {
             title: 'Profile',
             image: req.oidc.user.picture,
-            name: req.oidc.user.name
+            name: req.oidc.user.name,
+            user_id: req.oidc.user.sub
         });
   } else {
         res.render('profile', {
@@ -83,7 +84,8 @@ router.post('/hero', (req, res) => {
 
 
 router.put("/hero/:id", (req, res) => {
-    if (req.oidc.isAuthenticated()) {
+    if (req.oidc.isAuthenticated())
+    {
     // #swagger.summary = 'replaces a hero in the db based on ID'
     // #swagger.description = 'replaces a hero in the db based on ID'
     /* #swagger.responses[204] = {
@@ -118,5 +120,10 @@ router.delete("/hero/:id", (req, res) => {
         res.status(401).send("not logged in");
     }
 });
+
+
+function canUpdate(sid) {
+    
+}
 
 module.exports = router;
