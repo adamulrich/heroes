@@ -124,8 +124,8 @@ const doc = {
         example: true
       },
       insertedId: {
-        type: "string",
-        example: "<24 char guid>"
+        type: "number",
+        example: 0
       }
     }
   }

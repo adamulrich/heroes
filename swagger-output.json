@@ -141,6 +141,9 @@
               "$ref": "#/definitions/insertionSuccess"
             }
           },
+          "400": {
+            "description": "Bad Request"
+          },
           "401": {
             "description": "Unauthorized"
           },
@@ -505,11 +508,11 @@
               "properties": {
                 "type": {
                   "type": "string",
-                  "example": "string"
+                  "example": "number"
                 },
                 "example": {
-                  "type": "string",
-                  "example": "<24 char guid>"
+                  "type": "number",
+                  "example": 0
                 }
               }
             }

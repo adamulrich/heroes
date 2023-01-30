@@ -87,7 +87,12 @@ async function createNewHero(req, res) {
     try {
 
          //get new hero data from request object
-        const newUser =req.body;
+        const newHero = req.body;
+        // check object correctness
+        if (allKeysExist(heroTemplate, newHero) === false) {
+             res.status(400).send("Bad data.");
+            return;
+        }
 
         //get db
         const db = mongoDB.getDB().db("heroes");
@@ -99,11 +104,11 @@ async function createNewHero(req, res) {
             .sort({ id: -1})
             .limit(1).toArray();
 
-        newUser['id'] = newId[0]['id'] + 1;
+        newHero['id'] = newId[0]['id'] + 1;
         
 
         // create user in database
-        await db.collection("heroes").insertOne(newUser, (err, result) => {
+        await db.collection("heroes").insertOne(newHero, (err, result) => {
             if (err) {
                 console.log(err);
                 return err;
@@ -112,7 +117,7 @@ async function createNewHero(req, res) {
                 setHeaders(res);
                 delete result['insertedId'];
                 //return new id number
-                result['id'] = newUser['id'];
+                result['id'] = newHero['id'];
                 res.status(201).send(result);
             }
         });
@@ -131,6 +136,13 @@ async function updateHero(req, res) {
         
         //get new hero data from request object
         const updatedHero = req.body;
+
+        // check object correctness
+        if (allKeysExist(heroTemplate, updatedHero) === false) {
+            res.status(400).send("Bad data.");
+            return;
+        }
+       
 
         // if the hero id is missing from the data, add it.
         if (updatedHero['id'] == null) {
@@ -191,4 +203,70 @@ function setHeaders(res) {
     
 }
 
-module.exports = { naviagationUi, getNamesAndIds, getHero, createNewHero, updateHero, deleteHero } ;
+
+function allKeysExist(template, newHero) {
+
+    //check root keys
+    if (keysExist(template, newHero) === false) {
+        return false;
+    }
+
+    //check other keys
+    const keyList = ['powerstats', 'biography', 'appearance', 'work', 'connections', 'image']
+    keyList.forEach  ( key => {
+        if (keysExist(template[key], newHero[key]) === false) {
+            return false;
+        }
+    })
+}
+
+function keysExist(template, newHero) {
+    Object.keys(template).forEach(key => {
+        if (key in newHero == false) {
+            return false;
+        }
+    })
+    if (Object.keys(template).length != Object.keys(newHero).length) {
+        return false;
+    }
+    return true
+}
+
+const heroTemplate = {
+    name: "Grogu",
+    powerstats: {
+      intelligence: 40,
+      strength: 30,
+      speed: 33,
+      durability: 25,
+      power: 50,
+      combat: 50
+    },
+    biography: {
+      "full-name": "Grogu",
+      "alter-egos": "No alter egos found.",
+      aliases: ["The Child", "Baby Yoda"],
+      "place-of-birth": "-",
+      "first-appearance": "The Mandalorian (2019)",
+      publisher: "George Lucas",
+      alignment: "good"
+    },
+    appearance: {
+      gender: "Male",
+      race: "Yoda's species",
+      height: ["1'1", "34 cm"],
+      weight: ["19 lb", "17 kg"],
+      "eye-color": "Brown",
+      "hair-color": "White"
+    },
+    work: { occupation: "-", base: "-" },
+    connections: {
+      "group-affiliation": "",
+      relatives: ""
+    },
+    image: {
+      url: "https://static.wikia.nocookie.net/starwars/images/4/43/TheChild-Fathead.png/revision/latest?cb=20201031231040"
+    }
+  }
+
+  module.exports = { naviagationUi, getNamesAndIds, getHero, createNewHero, updateHero, deleteHero } ;
