@@ -16,32 +16,6 @@
   "schemes": [],
   "securityDefinitions": {},
   "paths": {
-    "/profile": {
-      "get": {
-        "description": "",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "401": {
-            "description": "Unauthorized"
-          }
-        }
-      }
-    },
-    "/": {
-      "get": {
-        "summary": "returns ok if the service is running",
-        "description": "returns ok if the service is running",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
     "/hero-names-and-ids": {
       "get": {
         "summary": "returns all the hero names and their ids",

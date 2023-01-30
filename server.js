@@ -17,6 +17,13 @@ const http = require('http');
 const https = require('https');
 const app = express();
 
+//views
+app.set('views', 'views');
+app.set('view engine', 'ejs');
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static('public'));
+
+
 // attach login/logout/ /callback
 const { auth } = require('express-openid-connect');
 
@@ -24,7 +31,7 @@ const config = {
     authRequired: false,
     auth0Logout: true,
     secret: process.env.SECRET,
-    baseURL: process.env.BASE_URL,
+    baseURL: `${process.env.BASE_URL}:${port}` ,
     clientID: process.env.CLIENT_ID,
     issuerBaseURL: process.env.ISSUER_BASE_URL
   };
@@ -40,7 +47,6 @@ app.use(cors());
 app.use(express.json());
 
 const swaggerSpec = require('./swagger-output.json');
-const { env } = require('process');
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerSpec));
 
 app.use('/', require('./routes/heroes'));
@@ -58,6 +64,6 @@ app.use((req, res, next) => {
 //start
 app.listen(port, (res, req) => {
     
-    console.log(`App listening on port ${port}`)
+    console.log(`App listening at ${process.env.BASE_URL}:${port}/profile`)
 })
             

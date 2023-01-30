@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="base.css" >
+    <title><%= title %></title>
+</head>
+<body>
+    <header>
+    <h1><%= title %></h1>
+    <%- include('links') %>
+    </header>
+    <section class="profile">
+        <img src="<%= image %>">
+        <h2><%=name%></h2>
+    </section>
+    
+</body>
+</html>

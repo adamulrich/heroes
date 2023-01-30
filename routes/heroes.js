@@ -4,21 +4,31 @@ const dataController = require('../controllers/heroes');
 
 // req.isAuthenticated is provided from the auth router
 router.get('/profile', (req, res) => {
-  if (req.oidc.isAuthenticated()) {
-    res.send(JSON.stringify(req.oidc.user));
+    // #swagger.ignore = true
+    if (req.oidc.isAuthenticated()) {
+        res.render('profile', {
+            title: 'Profile',
+            image: req.oidc.user.picture,
+            name: req.oidc.user.name
+        });
   } else {
-    res.status(401).send("not logged in");
+        res.render('profile', {
+            title: 'Profile',
+            image: '',
+            name: 'Not logged in.'
+        })
   }
-});
+})
 
 router.get('/',
+    // #swagger.ignore = true
     // #swagger.summary = 'returns ok if the service is running'
     // #swagger.description = 'returns ok if the service is running'
     /* #swagger.responses[200] = {
             description: 'OK',
         }
     */
-    dataController.returnHeartbeat);
+    dataController.naviagationUi);
 
 router.get('/hero-names-and-ids', 
     // #swagger.summary = 'returns all the hero names and their ids'

@@ -3,11 +3,38 @@ const ObjectId = require('mongodb').ObjectId;
 
 
 //heartbeat
-function returnHeartbeat(req, res) {
+function naviagationUi(req, res) {
 
-    const return_value = "Hero DB has completed a hero landing and ready to go!"
+    var login_name = "Not Logged in.";
+    if (req.oidc.isAuthenticated()) {
+        login_name = `Logged in as ${req.oidc.user.name}`
+    }
+    const return_value = `
+    <!DOCTYPE html><html>
+    <head><link rel="stylesheet" href="base.css">
+        <title>HeroDB</title>
+    </head>
+    <body>
+    <header>
+    <h1>Hero DB is up and running.</h1>
+    <nav>
+    <ul>
+        <li><a href='/login'>Login</a></li>
+        <li><a href='/logout'>Logout</a></li>
+        <li><a href='/profile'>Current Profile</a></li>
+        <li><a href='/api-docs'>Test the Hero API</a></li>
+    </ul>
+    </nav>
+    </header>
+    <section class="profile">
+        <h3>${login_name}</h3>
+    </section>
+    </body>
+    </html>`
+        
     //return data
     setHeaders(res);
+    res.setHeader('Content-Type', 'text/html');    
     res.status(200).send(return_value);
 }
 
@@ -164,4 +191,4 @@ function setHeaders(res) {
     
 }
 
-module.exports = { returnHeartbeat, getNamesAndIds, getHero, createNewHero, updateHero, deleteHero } ;
+module.exports = { naviagationUi, getNamesAndIds, getHero, createNewHero, updateHero, deleteHero } ;
