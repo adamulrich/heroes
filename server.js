@@ -31,7 +31,7 @@ const config = {
     authRequired: false,
     auth0Logout: true,
     secret: process.env.SECRET,
-    baseURL: `${process.env.BASE_URL}:${port}` ,
+    baseURL: process.env.BASE_URL ,
     clientID: process.env.CLIENT_ID,
     issuerBaseURL: process.env.ISSUER_BASE_URL
   };
@@ -64,6 +64,6 @@ app.use((req, res, next) => {
 //start
 app.listen(port, (res, req) => {
     
-    console.log(`App listening at ${process.env.BASE_URL}:${port}/profile`)
+    console.log(`App listening at ${process.env.BASE_URL}/profile`)
 })
             
