@@ -30,7 +30,7 @@ router.get('/',
             description: 'OK',
         }
     */
-    dataController.naviagationUi);
+    dataController.navigationUi);
 
 router.get('/hero-names-and-ids', 
     // #swagger.summary = 'returns all the hero names and their ids'

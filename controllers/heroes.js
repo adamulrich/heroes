@@ -3,7 +3,7 @@ const mongoDB = require('../dbconnect');
 const ObjectId = require('mongodb').ObjectId;
 
 //heartbeat
-function naviagationUi(req, res) {
+function navigationUi(req, res) {
 
     var login_name = "Not Logged in.";
     if (req.oidc.isAuthenticated()) {
@@ -313,4 +313,4 @@ const heroTemplate = {
     }
   }
 
-  module.exports = { naviagationUi, getNamesAndIds, getHero, createNewHero, updateHero, deleteHero } ;
+  module.exports = { navigationUi, getNamesAndIds, getHero, createNewHero, updateHero, deleteHero } ;
