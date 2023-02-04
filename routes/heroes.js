@@ -16,7 +16,8 @@ router.get('/profile', (req, res) => {
         res.render('profile', {
             title: 'Profile',
             image: '',
-            name: 'Not logged in.'
+            name: 'Not logged in.',
+            user_id: ''
         })
   }
 })
