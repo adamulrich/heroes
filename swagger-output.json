@@ -139,6 +139,9 @@
       "post": {
         "summary": "add a hero to the db",
         "description": "add a hero to the db",
+        "produces": [
+          "text/plain"
+        ],
         "parameters": [
           {
             "name": "obj",
@@ -151,10 +154,7 @@
         ],
         "responses": {
           "201": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/insertionSuccess"
-            }
+            "description": "OK"
           },
           "400": {
             "description": "Bad Request"
@@ -183,7 +183,7 @@
     "hero": {
       "type": "object",
       "properties": {
-        "name": {
+        "heroName": {
           "type": "string",
           "example": "Grogu"
         },
@@ -219,11 +219,11 @@
         "biography": {
           "type": "object",
           "properties": {
-            "full-name": {
+            "full_name": {
               "type": "string",
               "example": "Grogu"
             },
-            "alter-egos": {
+            "alter_egos": {
               "type": "string",
               "example": "No alter egos found."
             },
@@ -237,11 +237,11 @@
                 "type": "string"
               }
             },
-            "place-of-birth": {
+            "place_of_birth": {
               "type": "string",
               "example": "-"
             },
-            "first-appearance": {
+            "first_appearance": {
               "type": "string",
               "example": "The Mandalorian (2019)"
             },
@@ -286,11 +286,11 @@
                 "type": "string"
               }
             },
-            "eye-color": {
+            "eye_color": {
               "type": "string",
               "example": "Brown"
             },
-            "hair-color": {
+            "hair_color": {
               "type": "string",
               "example": "White"
             }
@@ -312,7 +312,7 @@
         "connections": {
           "type": "object",
           "properties": {
-            "group-affiliation": {
+            "group_affiliation": {
               "type": "string",
               "example": ""
             },
@@ -336,7 +336,7 @@
     "addHero": {
       "type": "object",
       "properties": {
-        "name": {
+        "heroName": {
           "type": "string",
           "example": "Baby Yoda"
         },
@@ -372,11 +372,11 @@
         "biography": {
           "type": "object",
           "properties": {
-            "full-name": {
+            "full_name": {
               "type": "string",
               "example": "Baby Yoda"
             },
-            "alter-egos": {
+            "alter_egos": {
               "type": "string",
               "example": "No alter egos found."
             },
@@ -389,11 +389,11 @@
                 "type": "string"
               }
             },
-            "place-of-birth": {
+            "place_of_birth": {
               "type": "string",
               "example": "-"
             },
-            "first-appearance": {
+            "first_appearance": {
               "type": "string",
               "example": "The Mandalorian (2019)"
             },
@@ -438,11 +438,11 @@
                 "type": "string"
               }
             },
-            "eye-color": {
+            "eye_color": {
               "type": "string",
               "example": "Brown"
             },
-            "hair-color": {
+            "hair_color": {
               "type": "string",
               "example": "White"
             }
@@ -464,7 +464,7 @@
         "connections": {
           "type": "object",
           "properties": {
-            "group-affiliation": {
+            "group_affiliation": {
               "type": "string",
               "example": ""
             },
@@ -495,46 +495,6 @@
         "name": {
           "type": "string",
           "example": "Grogu"
-        }
-      }
-    },
-    "insertionSuccess": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "type": "string",
-          "example": "object"
-        },
-        "properties": {
-          "type": "object",
-          "properties": {
-            "acknowledged": {
-              "type": "object",
-              "properties": {
-                "type": {
-                  "type": "string",
-                  "example": "boolean"
-                },
-                "example": {
-                  "type": "boolean",
-                  "example": true
-                }
-              }
-            },
-            "insertedId": {
-              "type": "object",
-              "properties": {
-                "type": {
-                  "type": "string",
-                  "example": "number"
-                },
-                "example": {
-                  "type": "number",
-                  "example": 0
-                }
-              }
-            }
-          }
         }
       }
     }

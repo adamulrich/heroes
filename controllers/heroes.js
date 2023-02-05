@@ -1,6 +1,7 @@
-const { exit } = require('process');
-const mongoDB = require('../dbconnect');
 const ObjectId = require('mongodb').ObjectId;
+const { default: mongoose } = require('mongoose');
+const Hero = require('../models/heroes');
+const User = require('../models/users')
 
 //heartbeat
 function navigationUi(req, res) {
@@ -9,47 +10,14 @@ function navigationUi(req, res) {
     if (req.oidc.isAuthenticated()) {
         login_name = `Logged in as ${req.oidc.user.name}`
     }
-    const return_value = `
-    <!DOCTYPE html><html>
-    <head><link rel="stylesheet" href="base.css">
-        <title>HeroDB</title>
-    </head>
-    <body>
-    <header>
-    <h1>Hero DB is up and running.</h1>
-    <nav>
-    <ul>
-        <li><a href='/login'>Login</a></li>
-        <li><a href='/logout'>Logout</a></li>
-        <li><a href='/profile'>Current Profile</a></li>
-        <li><a href='/api-docs'>Test the Hero API</a></li>
-    </ul>
-    </nav>
-    </header>
-    <section class="profile">
-        <h3>${login_name}</h3>
-    </section>
-    </body>
-    </html>`
-        
-    //return data
-    setHeaders(res);
-    res.setHeader('Content-Type', 'text/html');    
-    res.status(200).send(return_value);
 }
 
 // gets names and ids for all heroes
 async function getNamesAndIds(req, res) {
-
     try {
-        //get db
-        const dbo = mongoDB.getDB().db("heroes");
-
-        //get data
-        const result = await dbo.collection("heroes").find({}, 
-        { projection: {id: 1,name: 1, _id: 0}}).toArray();
+        const Heroes = await Hero.find({}).select(['heroId','name','-_id']);
             setHeaders(res);
-            res.status(200).send(result);
+            res.status(200).send(Heroes);
     } catch (err) {
         console.log(err);
         res.status(500).send(err);
@@ -66,20 +34,20 @@ async function getHero(req, res) {
         const heroId = parseInt(req.params.id);
         
         //get data
-        const dbo = await mongoDB.getDB().db("heroes");
-        dbo.collection("heroes").findOne({ id: heroId }, (err, result) => {
-            if (err)
-                return err;
-            else
-                if (result == null) {
-                    setHeaders(res);
-                    res.status(404).send(result);
-                } else {
-                    //return data
-                    setHeaders(res);
-                    res.status(200).send(result);
-                }
-        });
+        try {
+            const result = await Hero.find({ 'heroId': heroId });    
+            if (result == null) {
+                setHeaders(res);
+                res.status(404).send(result);
+            } else {
+                //return data
+                setHeaders(res);
+                res.status(200).send(result);
+            }
+
+        } catch (error) {
+            return err;
+        }
     } catch (err) {
         console.log(err);
         res.status(500).send(err);
@@ -92,41 +60,42 @@ async function createNewHero(req, res) {
     try {
         if (await getPrivData(req.oidc.user.sub,'create')) {
             //get new hero data from request object
-            const newHero = req.body;
-            // check object correctness
-            if (allKeysExist(heroTemplate, newHero) === false) {
+            try {
+                const newHero = new Hero(req.body);
+                // check object correctness
+                // if (allKeysExist(heroTemplate, req.body) === false) {
+                //     res.status(400).send("Bad data.");
+                //     return;
+                // }
+                //get new id number
+                const newId = await Hero.find({}).sort({ heroId: -1 }).limit(1);
+                newHero['heroId'] = newId[0]['heroId'] + 1;
+                let heroName = '', id = 0;
+                // create user in database
+                try {
+                    await newHero.save();
+                    heroName = newHero['heroName'];
+                    id = newHero['heroId'];
+                } catch (error) {
+                    console.log(error);
+                    res.setHeader('Content-Type', 'text/plain');
+                    res.status(400).send("Bad data.");
+                    return;
+                }
+            
+                setHeaders(res);
+                res.setHeader('Content-Type', 'text/plain');
+
+                res.status(201).send(`New Hero: ${heroName}, Id: ${id}`);
+            } catch (error) {
+                console.log(error);
+                res.setHeader('Content-Type', 'text/plain');
                 res.status(400).send("Bad data.");
                 return;
             }
 
-            //get db
-            const db = mongoDB.getDB().db("heroes");
-
-            //get new id number
-            const newId = await db.collection("heroes").find(
-                {},
-                { projection: { id: 1, _id: 0 } })
-                .sort({ id: -1 })
-                .limit(1).toArray();
-
-            newHero['id'] = newId[0]['id'] + 1;
-            
-
-            // create user in database
-            await db.collection("heroes").insertOne(newHero, (err, result) => {
-                if (err) {
-                    console.log(err);
-                    return err;
-                }
-                else {
-                    setHeaders(res);
-                    delete result['insertedId'];
-                    //return new id number
-                    result['id'] = newHero['id'];
-                    res.status(201).send(result);
-                }
-            });
         } else {
+            res.setHeader('Content-Type', 'text/plain');
             res.status(403).send("Not Authorized");    
         }
     } catch (err) {
@@ -236,16 +205,19 @@ async function canCreate(sid) {
 
 async function getPrivData(sub,priv) {
 
-    const dbo = await mongoDB.getDB().db("heroes");
-    const user = await dbo.collection("privileges").findOne({ user_id: sub });
-    if (user != null) {
-        return user.privileges[priv];
-    } else {
-        console.log("User not found.");
+    try {
+        const userPrivs = await User.findOne({ user_id: sub });
+        if (userPrivs != null) {
+            return userPrivs.privileges[priv];
+        } else {
+            console.log("User not found.");
+            return false;
+        }
+    
+    } catch (error) {
+        console.log(error)        
         return false;
     }
-
-    return returnValue;
 }
 
 function allKeysExist(template, newHero) {
@@ -277,7 +249,7 @@ function keysExist(template, newHero) {
 }
 
 const heroTemplate = {
-    name: "Grogu",
+    heroName: "Grogu",
     powerstats: {
       intelligence: 40,
       strength: 30,
@@ -287,11 +259,11 @@ const heroTemplate = {
       combat: 50
     },
     biography: {
-      "full-name": "Grogu",
-      "alter-egos": "No alter egos found.",
+      full_name: "Grogu",
+      alter_egos: "No alter egos found.",
       aliases: ["The Child", "Baby Yoda"],
-      "place-of-birth": "-",
-      "first-appearance": "The Mandalorian (2019)",
+      place_of_birth: "-",
+      first_appearance: "The Mandalorian (2019)",
       publisher: "George Lucas",
       alignment: "good"
     },
@@ -300,12 +272,13 @@ const heroTemplate = {
       race: "Yoda's species",
       height: ["1'1", "34 cm"],
       weight: ["19 lb", "17 kg"],
-      "eye-color": "Brown",
-      "hair-color": "White"
+      eye_color: "Brown",
+      hair_color: "White"
     },
-    work: { occupation: "-", base: "-" },
+    work: { occupation: "-", 
+            base: "-" },
     connections: {
-      "group-affiliation": "",
+      group_affiliation: "",
       relatives: ""
     },
     image: {

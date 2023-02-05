@@ -7,8 +7,9 @@ const cors = require('cors')
 const logger = require('morgan');
 
 // mongoDB
-const mongoDB = require('./dbconnect');
-mongoDB.initDB();
+// const mongoDB = require('./dbconnect');
+// mongoDB.initDB();
+
 
 
 //express
@@ -62,8 +63,16 @@ app.use((req, res, next) => {
 
 
 //start
-app.listen(port, (res, req) => {
+
+app.listen(port, async (res, req) => {
     
-    console.log(`App listening at ${process.env.BASE_URL}/profile`)
+    console.log(`App listening at ${process.env.BASE_URL}`)
+    try {
+        const mongoose = require('./db/mongoose.js');
+        const db = await mongoose.getDb();
+        console.log("connected via mongoose to mongo db");
+    } catch (error) {
+        console.log(error);
+    }
 })
-            
+

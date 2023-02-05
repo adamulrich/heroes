@@ -41,7 +41,7 @@ const doc = {
   },
   definitions: {
     hero: {
-    name: "Grogu",
+    heroName: "Grogu",
     powerstats: {
       intelligence: 40,
       strength: 30,
@@ -51,11 +51,11 @@ const doc = {
       combat: 50
     },
     biography: {
-      "full-name": "Grogu",
-      "alter-egos": "No alter egos found.",
+      full_name: "Grogu",
+      alter_egos: "No alter egos found.",
       aliases: ["The Child", "Baby Yoda"],
-      "place-of-birth": "-",
-      "first-appearance": "The Mandalorian (2019)",
+      place_of_birth: "-",
+      first_appearance: "The Mandalorian (2019)",
       publisher: "George Lucas",
       alignment: "good"
     },
@@ -64,20 +64,21 @@ const doc = {
       race: "Yoda's species",
       height: ["1'1", "34 cm"],
       weight: ["19 lb", "17 kg"],
-      "eye-color": "Brown",
-      "hair-color": "White"
+      eye_color: "Brown",
+      hair_color: "White"
     },
-    work: { occupation: "-", "base": "-" },
+    work: { occupation: "-", 
+            base: "-" },
     connections: {
-      "group-affiliation": "",
-      relatives: ""
+      group_affiliation: "-",
+      relatives: "-"
     },
     image: {
       url: "https://static.wikia.nocookie.net/starwars/images/4/43/TheChild-Fathead.png/revision/latest?cb=20201031231040"
     }
   },
   addHero: {
-    name: "Baby Yoda",
+    heroName: "Baby Yoda",
     powerstats: {
       intelligence: 40,
       strength: 30,
@@ -87,11 +88,11 @@ const doc = {
       combat: 50
     },
     biography: {
-      "full-name": "Baby Yoda",
-      "alter-egos": "No alter egos found.",
+      full_name: "Baby Yoda",
+      alter_egos: "No alter egos found.",
       aliases: ["The Child"],
-      "place-of-birth": "-",
-      "first-appearance": "The Mandalorian (2019)",
+      place_of_birth: "-",
+      first_appearance: "The Mandalorian (2019)",
       publisher: "George Lucas",
       alignment: "good"
     },
@@ -100,13 +101,13 @@ const doc = {
       race: "Yoda's species",
       height: ["1'1", "34 cm"],
       weight: ["19 lb", "17 kg"],
-      "eye-color": "Brown",
-      "hair-color": "White"
+      eye_color: "Brown",
+      hair_color: "White"
     },
     work: { occupation: "-", "base": "-" },
     connections: {
-      "group-affiliation": "",
-      relatives: ""
+      group_affiliation: "-",
+      relatives: "-"
     },
     image: {
       url: "https://static.wikia.nocookie.net/starwars/images/4/43/TheChild-Fathead.png/revision/latest?cb=20201031231040"
@@ -115,22 +116,7 @@ const doc = {
   heroNameAndId: {
     id: 0,
     name: "Grogu"
-  },
-  insertionSuccess: {
-    type: "object",
-    properties: {
-      acknowledged: {
-        type: "boolean",
-        example: true
-      },
-      insertedId: {
-        type: "number",
-        example: 0
-      }
-    }
   }
-
-
   }
 };
 
