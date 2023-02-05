@@ -15,12 +15,11 @@ function navigationUi(req, res) {
 // gets names and ids for all heroes
 async function getNamesAndIds(req, res) {
     try {
-        const Heroes = await Hero.find({}).select(['heroId','name','-_id']);
+        const Heroes = await Hero.find({}).select(['heroId','heroName','-_id']);
             setHeaders(res);
             res.status(200).send(Heroes);
-    } catch (err) {
-        console.log(err);
-        res.status(500).send(err);
+    } catch (error) {
+        res.status(500).send(error);
         }  
 }
 
@@ -36,21 +35,19 @@ async function getHero(req, res) {
         //get data
         try {
             const result = await Hero.find({ 'heroId': heroId });    
-            if (result == null) {
+            if (result == null || result.length == 0) {
                 setHeaders(res);
                 res.status(404).send(result);
             } else {
                 //return data
                 setHeaders(res);
-                res.status(200).send(result);
+                res.status(200).send(result[0]);
             }
-
         } catch (error) {
             return err;
         }
-    } catch (err) {
-        console.log(err);
-        res.status(500).send(err);
+    } catch (error) {
+        res.status(500).send(error);
     }
 }
 
@@ -62,12 +59,8 @@ async function createNewHero(req, res) {
             //get new hero data from request object
             try {
                 const newHero = new Hero(req.body);
-                // check object correctness
-                // if (allKeysExist(heroTemplate, req.body) === false) {
-                //     res.status(400).send("Bad data.");
-                //     return;
-                // }
-                //get new id number
+
+                // get new id number
                 const newId = await Hero.find({}).sort({ heroId: -1 }).limit(1);
                 newHero['heroId'] = newId[0]['heroId'] + 1;
                 let heroName = '', id = 0;
@@ -77,9 +70,8 @@ async function createNewHero(req, res) {
                     heroName = newHero['heroName'];
                     id = newHero['heroId'];
                 } catch (error) {
-                    console.log(error);
                     res.setHeader('Content-Type', 'text/plain');
-                    res.status(400).send("Bad data.");
+                    res.status(400).send(`Bad data. ${error}`);
                     return;
                 }
             
@@ -88,9 +80,8 @@ async function createNewHero(req, res) {
 
                 res.status(201).send(`New Hero: ${heroName}, Id: ${id}`);
             } catch (error) {
-                console.log(error);
                 res.setHeader('Content-Type', 'text/plain');
-                res.status(400).send("Bad data.");
+                res.status(400).send(`Bad data. ${error}`);
                 return;
             }
 
@@ -98,9 +89,8 @@ async function createNewHero(req, res) {
             res.setHeader('Content-Type', 'text/plain');
             res.status(403).send("Not Authorized");    
         }
-    } catch (err) {
-        console.log(err);
-        res.status(500).send(err);
+    } catch (error) {
+        res.status(500).send(error);
     }
 }
 
@@ -114,39 +104,35 @@ async function updateHero(req, res) {
             
             //get new hero data from request object
             const updatedHero = req.body;
-
-            // check object correctness
-            if (allKeysExist(heroTemplate, updatedHero) === false) {
-                res.status(400).send("Bad data.");
+            let result =  null;
+            // update User
+            try {
+                updatedHero['heroId'] = heroId;
+                result = await Hero.updateOne({heroId: {$eq: heroId}}, updatedHero);
+            } catch (error) {
+                res.setHeader('Content-Type', 'text/plain');
+                res.status(400).send(`Bad data. ${error}`);
                 return;
             }
-        
-
-            // if the hero id is missing from the data, add it.
-            if (updatedHero['id'] == null) {
-                updatedHero['id'] = heroId;
+            let statusCode = 0;
+            let modifiedCount = 0;
+            if (result) {modifiedCount = result.modifiedCount}
+            if (result === null || modifiedCount == 0 ) {
+                statusCode = 404
+            } else {
+                statusCode = 200
             }
+            setHeaders(res);
+            res.setHeader('Content-Type', 'application/json');
+            res.status(statusCode).send(result);
 
-            //update contact
-            const db = mongoDB.getDB().db("heroes");
-            await db.collection("heroes").replaceOne({ id: heroId }, updatedHero, (err, result) => {
-
-                if (err) {
-                    console.log(err);
-                    return err;
-                }
-                else {
-                    // return result
-                    setHeaders(res);
-                    res.status(204).send('');
-                }
-            })
         } else {
+            res.setHeader('Content-Type', 'text/plain');
             res.status(403).send("Not Authorized");    
         }
-     } catch (err) {
-        console.log(err);
-        res.status(500).send(err);
+
+     } catch (error) {
+        res.status(500).send(error);
     }
 }
 
@@ -155,30 +141,34 @@ async function deleteHero(req, res) {
 
     try {
         if (await getPrivData(req.oidc.user.sub, 'delete')) {
+
             //get id from request object
             const heroId = parseInt(req.params.id);
-            
-            //get data
-            const dbo = mongoDB.getDB().db("heroes");
-            await dbo.collection("heroes").deleteOne({ id: heroId }, (err, result) => {
-                if (err)
-                    return err;
-                else
-                    if (result.deletedCount == 0) {
-                        setHeaders(res);
-                        res.status(404).send(result);
-                    } else {
-                        //return data
-                        setHeaders(res);
-                        res.status(200).send(result);
-                    }
-            });
+            let result = '';
+            //delete
+            try {
+                
+                result = await Hero.deleteOne({heroId: {$eq: heroId}});
+            } catch (error) {
+                res.setHeader('Content-Type', 'text/plain');
+                res.status(400).send(`Bad data. ${error}`);
+                return;
+            }
+            let statusCode = 0;
+            if (result.deletedCount == 0) {
+                statusCode = 404
+            } else {
+                statusCode = 200
+            }
+            setHeaders(res);
+            res.setHeader('Content-Type', 'text/plain');
+            res.status(statusCode).send(result);
+
         } else {
             res.status(403).send("Not Authorized");    
         }
-        } catch (err) {
-        console.log(err);
-        res.status(500).send(err);
+        } catch (error) {
+        res.status(500).send(error);
     }
 }
 
@@ -191,17 +181,6 @@ function setHeaders(res) {
     res.setHeader('Access-Control-Allow-Credentials', true);
     
 }
-
-async function canCreate(sid) {
-    const user = await getPrivData(sid);
-    if (user != null) {
-        return user.privileges.create;
-    } else {
-        console.log("user not found");
-        return false;
-    }
-}
-
 
 async function getPrivData(sub,priv) {
 

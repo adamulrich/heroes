@@ -70,6 +70,9 @@
       "put": {
         "summary": "replaces a hero in the db based on ID",
         "description": "replaces a hero in the db based on ID",
+        "produces": [
+          "text/plain"
+        ],
         "parameters": [
           {
             "name": "id",
@@ -107,6 +110,9 @@
       "delete": {
         "summary": "deletes a hero from the db based on ID.",
         "description": "deletes a hero from the db based on ID.",
+        "produces": [
+          "text/plain"
+        ],
         "parameters": [
           {
             "name": "id",
@@ -120,14 +126,14 @@
           "200": {
             "description": "OK"
           },
+          "400": {
+            "description": "Bad Request"
+          },
           "401": {
             "description": "Unauthorized"
           },
           "403": {
             "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
           },
           "500": {
             "description": "Internal Server Error"
@@ -314,11 +320,11 @@
           "properties": {
             "group_affiliation": {
               "type": "string",
-              "example": ""
+              "example": "-"
             },
             "relatives": {
               "type": "string",
-              "example": ""
+              "example": "-"
             }
           }
         },
@@ -466,11 +472,11 @@
           "properties": {
             "group_affiliation": {
               "type": "string",
-              "example": ""
+              "example": "-"
             },
             "relatives": {
               "type": "string",
-              "example": ""
+              "example": "-"
             }
           }
         },
