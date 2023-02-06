@@ -97,7 +97,6 @@ async function updateHero(req, res) {
             const updatedHero = req.body;
             let result = null;
             
-            
             // update User
             try {
                 updatedHero['heroId'] = heroId;
