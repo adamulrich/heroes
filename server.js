@@ -6,12 +6,6 @@ const swaggerUI = require("swagger-ui-express");
 const cors = require('cors')
 const logger = require('morgan');
 
-// mongoDB
-// const mongoDB = require('./dbconnect');
-// mongoDB.initDB();
-
-
-
 //express
 const express = require('express');
 const http = require('http');
@@ -37,8 +31,7 @@ const config = {
     issuerBaseURL: process.env.ISSUER_BASE_URL
   };
   
-  
- app.use(auth(config));
+app.use(auth(config));
 
 // logger
 app.use(logger('dev'));
@@ -60,10 +53,7 @@ app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Credentials', true);
 })
 
-
-
 //start
-
 app.listen(port, async (res, req) => {
     
     console.log(`App listening at ${process.env.BASE_URL}`)
@@ -75,4 +65,3 @@ app.listen(port, async (res, req) => {
         console.log(error);
     }
 })
-

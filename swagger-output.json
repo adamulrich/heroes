@@ -70,9 +70,6 @@
       "put": {
         "summary": "replaces a hero in the db based on ID",
         "description": "replaces a hero in the db based on ID",
-        "produces": [
-          "text/plain"
-        ],
         "parameters": [
           {
             "name": "id",
@@ -110,9 +107,6 @@
       "delete": {
         "summary": "deletes a hero from the db based on ID.",
         "description": "deletes a hero from the db based on ID.",
-        "produces": [
-          "text/plain"
-        ],
         "parameters": [
           {
             "name": "id",
@@ -145,9 +139,6 @@
       "post": {
         "summary": "add a hero to the db",
         "description": "add a hero to the db",
-        "produces": [
-          "text/plain"
-        ],
         "parameters": [
           {
             "name": "obj",
