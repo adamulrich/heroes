@@ -1,6 +1,6 @@
 const ObjectId = require('mongodb').ObjectId;
 const { default: mongoose } = require('mongoose');
-const Hero = require('../models/heroes');
+const Hero = require('../models/heroes').heroModel;
 const User = require('../models/users')
 const contentText = 'text/plain';
 const contentJson = 'application/json';
@@ -62,7 +62,7 @@ async function createNewHero(req, res) {
                 // failed to save
                 } catch (error) {
                     setHeaders(res, contentText);
-                    res.status(400).send(error);
+                    res.status(422).send(error);
                     return;
                 }
             
@@ -107,7 +107,7 @@ async function updateHero(req, res) {
                 
             } catch (error) {
                 setHeaders(res, contentText);
-                res.status(400).send(`Bad data. ${error}`);
+                res.status(422).send(`Bad data. ${error}`);
                 return;
             }
 
@@ -148,7 +148,7 @@ async function deleteHero(req, res) {
                 result = await Hero.deleteOne({heroId: {$eq: heroId}});
             } catch (error) {
                 setHeaders(res, contentText);
-                res.status(400).send(`Bad data. ${error}`);
+                res.status(422).send(`Bad data. ${error}`);
                 return;
             }
             // if deletedCount is 0 set the status code to 404

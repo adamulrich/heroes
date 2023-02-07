@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const heroSchema = new mongoose.Schema (
     {
         heroId: { type: Number, required: true },
-        heroName: { type: String, required: true },
+        heroName: { type: String, required: true, example: "Grogu" },
         powerstats: {
           intelligence: { type: Number, required: true },
           strength: { type: Number, required: true },
@@ -40,5 +40,43 @@ const heroSchema = new mongoose.Schema (
       },
         { retainKeyOrder: true })
 
+const addHeroExample = 
+  {
+    heroName: "Baby Yoda",
+    powerstats: {
+      intelligence: 40,
+      strength: 30,
+      speed: 33,
+      durability: 25,
+      power: 50,
+      combat: 50
+    },
+    biography: {
+      full_name: "Baby Yoda",
+      alter_egos: "No alter egos found.",
+      aliases: ["The Child"],
+      place_of_birth: "-",
+      first_appearance: "The Mandalorian (2019)",
+      publisher: "George Lucas",
+      alignment: "good"
+    },
+    appearance: {
+      gender: "Male",
+      race: "Yoda's species",
+      height: ["1'1", "34 cm"],
+      weight: ["19 lb", "17 kg"],
+      eye_color: "Brown",
+      hair_color: "White"
+    },
+    work: { occupation: "-", "base": "-" },
+    connections: {
+      group_affiliation: "-",
+      relatives: "-"
+    },
+    image: {
+      url: "https://static.wikia.nocookie.net/starwars/images/4/43/TheChild-Fathead.png/revision/latest?cb=20201031231040"
+    }
+  }
 
-module.exports = mongoose.model('Heroes',heroSchema, 'heroes')
+heroModel = mongoose.model('hero', heroSchema, 'heroes');        
+module.exports = {heroModel, addHeroExample}

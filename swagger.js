@@ -2,24 +2,22 @@ const swaggerAutogen = require('swagger-autogen')();
 
 const doc = {
   info: {
-    version: '',      // by default: '1.0.0'
-    title: 'HEROES REST API',        // by default: 'REST API'
-    description: '',  // by default: ''
+    version: '',      
+    title: 'HEROES REST API', 
+    description: '',  
   },
-  host: '',      // by default: 'localhost:3000'
-  basePath: '',  // by default: '/'
-  schemes: [],   // by default: ['http']
-  consumes: [],  // by default: ['application/json']
-  produces: [],  // by default: ['application/json']
-  tags: [        // by default: empty Array
+  host: '',      
+  basePath: '',  
+  schemes: [],   
+  consumes: [],  
+  produces: [],  
+  tags: [        
     {
-      name: '',         // Tag name
-      description: '',  // Tag description
+      name: '',         
+      description: '',  
     },
-    // { ... }
   ],
-  securityDefinitions: {},  // by default: empty object
-  definitions: {},          // by default: empty object (Swagger 2.0)
+  securityDefinitions: {}, 
   components: {
     securitySchemes: {
       oAuth2Implicit: {
@@ -40,106 +38,14 @@ const doc = {
     }
   },
   definitions: {
-    hero: {
-    heroName: "Grogu",
-    powerstats: {
-      intelligence: 40,
-      strength: 30,
-      speed: 33,
-      durability: 25,
-      power: 50,
-      combat: 50
-    },
-    biography: {
-      full_name: "Grogu",
-      alter_egos: "No alter egos found.",
-      aliases: ["The Child", "Baby Yoda"],
-      place_of_birth: "-",
-      first_appearance: "The Mandalorian (2019)",
-      publisher: "George Lucas",
-      alignment: "good"
-    },
-    appearance: {
-      gender: "Male",
-      race: "Yoda's species",
-      height: ["1'1", "34 cm"],
-      weight: ["19 lb", "17 kg"],
-      eye_color: "Brown",
-      hair_color: "White"
-    },
-    work: { occupation: "-", 
-            base: "-" },
-    connections: {
-      group_affiliation: "-",
-      relatives: "-"
-    },
-    image: {
-      url: "https://static.wikia.nocookie.net/starwars/images/4/43/TheChild-Fathead.png/revision/latest?cb=20201031231040"
+    heroNameAndId: {
+      id: 0,
+      name: "Grogu"
     }
-  },
-  addHero: {
-    heroName: "Baby Yoda",
-    powerstats: {
-      intelligence: 40,
-      strength: 30,
-      speed: 33,
-      durability: 25,
-      power: 50,
-      combat: 50
-    },
-    biography: {
-      full_name: "Baby Yoda",
-      alter_egos: "No alter egos found.",
-      aliases: ["The Child"],
-      place_of_birth: "-",
-      first_appearance: "The Mandalorian (2019)",
-      publisher: "George Lucas",
-      alignment: "good"
-    },
-    appearance: {
-      gender: "Male",
-      race: "Yoda's species",
-      height: ["1'1", "34 cm"],
-      weight: ["19 lb", "17 kg"],
-      eye_color: "Brown",
-      hair_color: "White"
-    },
-    work: { occupation: "-", "base": "-" },
-    connections: {
-      group_affiliation: "-",
-      relatives: "-"
-    },
-    image: {
-      url: "https://static.wikia.nocookie.net/starwars/images/4/43/TheChild-Fathead.png/revision/latest?cb=20201031231040"
-    }
-  },
-  heroNameAndId: {
-    id: 0,
-    name: "Grogu"
-  }
   }
 };
 
 const outputFile = './swagger-output.json';
 const endpointsFiles = ['./server.js'];
 
-/* NOTE: if you use the express Router, you must pass in the 
-   'endpointsFiles' only the root file where the route starts,
-   such as: index.js, app.js, routes.js, ... */
-
 swaggerAutogen(outputFile, endpointsFiles, doc);
-
-
-// oAuthSample: { 
-//   type: 'oauth2',
-//   description: 'This API uses OAuth 2 with the implicit grant flow.',
-//   flows: {
-//     implicit:  { //flow(authorizationCode, implicit, password or clientCredentials),
-//       authorizationUrl: 'https://domain.auth0.com/authorize',
-//       scopes: {
-//         writer: 'write new data to heroes',
-//         reader: 'can read data from heroes' 
-//       }
-//     }
-//  }
-// }

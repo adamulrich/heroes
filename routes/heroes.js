@@ -22,7 +22,6 @@ router.get('/', (req, res) => {
   }
 })
 
-
 router.get('/hero-names-and-ids', 
     // #swagger.summary = 'returns all the hero names and their ids'
     // #swagger.description = 'returns all the hero names and their ids'
@@ -64,7 +63,7 @@ router.post('/hero', (req, res) => {
         /*  #swagger.parameters['obj'] = {
                 in: 'body',
                 description: 'Add a user',
-                schema: { $ref: '#/definitions/addHero' }
+                schema: { $ref: '#/definitions/hero' }
             } */
             
         dataController.createNewHero(req, res); 
