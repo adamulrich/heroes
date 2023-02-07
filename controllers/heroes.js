@@ -14,7 +14,7 @@ async function getNamesAndIds(req, res) {
 
     } catch (error) {
         setHeaders(res, contentText);
-        res.status(500).send(error);
+        res.status(500).send(`${error}`);
         }  
 }
 
@@ -37,7 +37,7 @@ async function getHero(req, res) {
         }
     } catch (error) {
         setHeaders(res, contentText);
-        res.status(500).send(error);
+        res.status(500).send(`${error}`);
     }
 }
 
@@ -62,7 +62,7 @@ async function createNewHero(req, res) {
                 // failed to save
                 } catch (error) {
                     setHeaders(res, contentText);
-                    res.status(422).send(error);
+                    res.status(422).send(`Bad data. ${error}`);
                     return;
                 }
             
@@ -73,7 +73,7 @@ async function createNewHero(req, res) {
             // catch unknown errors
             } catch (error) {
                 setHeaders(res, contentText);
-                res.status(400).send(error);
+                res.status(400).send(`${error}`);
                 return;
             }
         // failed authoriation for user
@@ -82,7 +82,7 @@ async function createNewHero(req, res) {
             res.status(403).send("Incorrect permissions.");    
         }
     } catch (error) {
-        res.status(500).send(error);
+        res.status(500).send(`${error}`);
     }
 }
 
@@ -130,7 +130,7 @@ async function updateHero(req, res) {
             res.status(403).send("Incorrect permissions.");    
         }
      } catch (error) {
-        res.status(500).send(error);
+        res.status(500).send(`${error}`);
     }
 }
 
@@ -166,7 +166,7 @@ async function deleteHero(req, res) {
             res.status(403).send("Incorrect permissions.");    
         }
         } catch (error) {
-        res.status(500).send(error);
+        res.status(500).send(`${error}`);
     }
 }
 
@@ -191,7 +191,7 @@ async function getPrivData(sub,priv) {
         }
     
     } catch (error) {
-        console.log(error)        
+        console.log(`${error}`)        
         return false;
     }
 }
