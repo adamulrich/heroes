@@ -6,10 +6,21 @@ const swaggerUI = require("swagger-ui-express");
 const cors = require('cors')
 const logger = require('morgan');
 
-// mongoDB
-const mongoDB = require('./dbconnect');
-mongoDB.initDB();
+// db models
+const mongoose = require('./db/mongoose')
+const Hero = require('./models/heroes');
+const User = require('./models/users')
+const m2s = require('mongoose-to-swagger');
 
+
+// swagger
+const heroSchema = m2s(Hero.heroModel);
+const addHeroExample = Hero.addHeroExample;
+const userSchema = m2s(User);
+let swaggerSpec = require('./swagger-output.json');
+swaggerSpec.definitions.hero = heroSchema;
+swaggerSpec.definitions.hero.example = addHeroExample;
+swaggerSpec.definitions.user = userSchema;
 
 //express
 const express = require('express');
@@ -36,8 +47,7 @@ const config = {
     issuerBaseURL: process.env.ISSUER_BASE_URL
   };
   
-  
- app.use(auth(config));
+app.use(auth(config));
 
 // logger
 app.use(logger('dev'));
@@ -46,7 +56,7 @@ app.use(logger('dev'));
 app.use(cors());
 app.use(express.json());
 
-const swaggerSpec = require('./swagger-output.json');
+// swagger
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerSpec));
 
 app.use('/', require('./routes/heroes'));
@@ -59,11 +69,14 @@ app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Credentials', true);
 })
 
-
-
 //start
-app.listen(port, (res, req) => {
+app.listen(port, async (res, req) => {
     
-    console.log(`App listening at ${process.env.BASE_URL}/profile`)
+    console.log(`App listening at ${process.env.BASE_URL}`)
+    try {
+        const db = await mongoose.getDb();
+        console.log("connected via mongoose to mongo db");
+    } catch (error) {
+        console.log(error);
+    }
 })
-            

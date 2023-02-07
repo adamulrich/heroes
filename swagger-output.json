@@ -90,14 +90,14 @@
           "204": {
             "description": "OK"
           },
-          "400": {
-            "description": "Bad Request"
-          },
           "401": {
             "description": "Unauthorized"
           },
           "403": {
             "description": "Forbidden"
+          },
+          "422": {
+            "description": "Unprocessable Entity"
           },
           "500": {
             "description": "Internal Server Error"
@@ -126,8 +126,8 @@
           "403": {
             "description": "Forbidden"
           },
-          "404": {
-            "description": "Not Found"
+          "422": {
+            "description": "Unprocessable Entity"
           },
           "500": {
             "description": "Internal Server Error"
@@ -145,16 +145,13 @@
             "in": "body",
             "description": "Add a user",
             "schema": {
-              "$ref": "#/definitions/addHero"
+              "$ref": "#/definitions/hero"
             }
           }
         ],
         "responses": {
           "201": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/insertionSuccess"
-            }
+            "description": "OK"
           },
           "400": {
             "description": "Bad Request"
@@ -164,6 +161,9 @@
           },
           "403": {
             "description": "Forbidden"
+          },
+          "422": {
+            "description": "Unprocessable Entity"
           },
           "500": {
             "description": "Internal Server Error"
@@ -180,311 +180,6 @@
     }
   },
   "definitions": {
-    "hero": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string",
-          "example": "Grogu"
-        },
-        "powerstats": {
-          "type": "object",
-          "properties": {
-            "intelligence": {
-              "type": "number",
-              "example": 40
-            },
-            "strength": {
-              "type": "number",
-              "example": 30
-            },
-            "speed": {
-              "type": "number",
-              "example": 33
-            },
-            "durability": {
-              "type": "number",
-              "example": 25
-            },
-            "power": {
-              "type": "number",
-              "example": 50
-            },
-            "combat": {
-              "type": "number",
-              "example": 50
-            }
-          }
-        },
-        "biography": {
-          "type": "object",
-          "properties": {
-            "full-name": {
-              "type": "string",
-              "example": "Grogu"
-            },
-            "alter-egos": {
-              "type": "string",
-              "example": "No alter egos found."
-            },
-            "aliases": {
-              "type": "array",
-              "example": [
-                "The Child",
-                "Baby Yoda"
-              ],
-              "items": {
-                "type": "string"
-              }
-            },
-            "place-of-birth": {
-              "type": "string",
-              "example": "-"
-            },
-            "first-appearance": {
-              "type": "string",
-              "example": "The Mandalorian (2019)"
-            },
-            "publisher": {
-              "type": "string",
-              "example": "George Lucas"
-            },
-            "alignment": {
-              "type": "string",
-              "example": "good"
-            }
-          }
-        },
-        "appearance": {
-          "type": "object",
-          "properties": {
-            "gender": {
-              "type": "string",
-              "example": "Male"
-            },
-            "race": {
-              "type": "string",
-              "example": "Yoda's species"
-            },
-            "height": {
-              "type": "array",
-              "example": [
-                "1'1",
-                "34 cm"
-              ],
-              "items": {
-                "type": "string"
-              }
-            },
-            "weight": {
-              "type": "array",
-              "example": [
-                "19 lb",
-                "17 kg"
-              ],
-              "items": {
-                "type": "string"
-              }
-            },
-            "eye-color": {
-              "type": "string",
-              "example": "Brown"
-            },
-            "hair-color": {
-              "type": "string",
-              "example": "White"
-            }
-          }
-        },
-        "work": {
-          "type": "object",
-          "properties": {
-            "occupation": {
-              "type": "string",
-              "example": "-"
-            },
-            "base": {
-              "type": "string",
-              "example": "-"
-            }
-          }
-        },
-        "connections": {
-          "type": "object",
-          "properties": {
-            "group-affiliation": {
-              "type": "string",
-              "example": ""
-            },
-            "relatives": {
-              "type": "string",
-              "example": ""
-            }
-          }
-        },
-        "image": {
-          "type": "object",
-          "properties": {
-            "url": {
-              "type": "string",
-              "example": "https://static.wikia.nocookie.net/starwars/images/4/43/TheChild-Fathead.png/revision/latest?cb=20201031231040"
-            }
-          }
-        }
-      }
-    },
-    "addHero": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string",
-          "example": "Baby Yoda"
-        },
-        "powerstats": {
-          "type": "object",
-          "properties": {
-            "intelligence": {
-              "type": "number",
-              "example": 40
-            },
-            "strength": {
-              "type": "number",
-              "example": 30
-            },
-            "speed": {
-              "type": "number",
-              "example": 33
-            },
-            "durability": {
-              "type": "number",
-              "example": 25
-            },
-            "power": {
-              "type": "number",
-              "example": 50
-            },
-            "combat": {
-              "type": "number",
-              "example": 50
-            }
-          }
-        },
-        "biography": {
-          "type": "object",
-          "properties": {
-            "full-name": {
-              "type": "string",
-              "example": "Baby Yoda"
-            },
-            "alter-egos": {
-              "type": "string",
-              "example": "No alter egos found."
-            },
-            "aliases": {
-              "type": "array",
-              "example": [
-                "The Child"
-              ],
-              "items": {
-                "type": "string"
-              }
-            },
-            "place-of-birth": {
-              "type": "string",
-              "example": "-"
-            },
-            "first-appearance": {
-              "type": "string",
-              "example": "The Mandalorian (2019)"
-            },
-            "publisher": {
-              "type": "string",
-              "example": "George Lucas"
-            },
-            "alignment": {
-              "type": "string",
-              "example": "good"
-            }
-          }
-        },
-        "appearance": {
-          "type": "object",
-          "properties": {
-            "gender": {
-              "type": "string",
-              "example": "Male"
-            },
-            "race": {
-              "type": "string",
-              "example": "Yoda's species"
-            },
-            "height": {
-              "type": "array",
-              "example": [
-                "1'1",
-                "34 cm"
-              ],
-              "items": {
-                "type": "string"
-              }
-            },
-            "weight": {
-              "type": "array",
-              "example": [
-                "19 lb",
-                "17 kg"
-              ],
-              "items": {
-                "type": "string"
-              }
-            },
-            "eye-color": {
-              "type": "string",
-              "example": "Brown"
-            },
-            "hair-color": {
-              "type": "string",
-              "example": "White"
-            }
-          }
-        },
-        "work": {
-          "type": "object",
-          "properties": {
-            "occupation": {
-              "type": "string",
-              "example": "-"
-            },
-            "base": {
-              "type": "string",
-              "example": "-"
-            }
-          }
-        },
-        "connections": {
-          "type": "object",
-          "properties": {
-            "group-affiliation": {
-              "type": "string",
-              "example": ""
-            },
-            "relatives": {
-              "type": "string",
-              "example": ""
-            }
-          }
-        },
-        "image": {
-          "type": "object",
-          "properties": {
-            "url": {
-              "type": "string",
-              "example": "https://static.wikia.nocookie.net/starwars/images/4/43/TheChild-Fathead.png/revision/latest?cb=20201031231040"
-            }
-          }
-        }
-      }
-    },
     "heroNameAndId": {
       "type": "object",
       "properties": {
@@ -495,46 +190,6 @@
         "name": {
           "type": "string",
           "example": "Grogu"
-        }
-      }
-    },
-    "insertionSuccess": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "type": "string",
-          "example": "object"
-        },
-        "properties": {
-          "type": "object",
-          "properties": {
-            "acknowledged": {
-              "type": "object",
-              "properties": {
-                "type": {
-                  "type": "string",
-                  "example": "boolean"
-                },
-                "example": {
-                  "type": "boolean",
-                  "example": true
-                }
-              }
-            },
-            "insertedId": {
-              "type": "object",
-              "properties": {
-                "type": {
-                  "type": "string",
-                  "example": "number"
-                },
-                "example": {
-                  "type": "number",
-                  "example": 0
-                }
-              }
-            }
-          }
         }
       }
     }

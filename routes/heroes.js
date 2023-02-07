@@ -3,7 +3,7 @@ const router = require('express').Router();
 const dataController = require('../controllers/heroes');
 
 // req.isAuthenticated is provided from the auth router
-router.get('/profile', (req, res) => {
+router.get('/', (req, res) => {
     // #swagger.ignore = true
     if (req.oidc.isAuthenticated()) {
         res.render('profile', {
@@ -21,16 +21,6 @@ router.get('/profile', (req, res) => {
         })
   }
 })
-
-router.get('/',
-    // #swagger.ignore = true
-    // #swagger.summary = 'returns ok if the service is running'
-    // #swagger.description = 'returns ok if the service is running'
-    /* #swagger.responses[200] = {
-            description: 'OK',
-        }
-    */
-    dataController.navigationUi);
 
 router.get('/hero-names-and-ids', 
     // #swagger.summary = 'returns all the hero names and their ids'
@@ -66,15 +56,14 @@ router.post('/hero', (req, res) => {
         // #swagger.summary = 'add a hero to the db'
         // #swagger.description = 'add a hero to the db'
         /* #swagger.responses[201] = {
-                description: 'OK',
-                schema: { $ref: '#definitions/insertionSuccess' }
+                description: 'OK'}
                 }
         }
         */
         /*  #swagger.parameters['obj'] = {
                 in: 'body',
                 description: 'Add a user',
-                schema: { $ref: '#/definitions/addHero' }
+                schema: { $ref: '#/definitions/hero' }
             } */
             
         dataController.createNewHero(req, res); 
