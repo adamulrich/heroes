@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const heroSchema = new mongoose.Schema (
     {
         heroId: { type: Number, required: true },
-        heroName: { type: String, required: true, example: "Grogu" },
+        heroName: { type: String, required: true},
         powerstats: {
           intelligence: { type: Number, required: true },
           strength: { type: Number, required: true },

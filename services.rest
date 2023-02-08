@@ -1,6 +1,6 @@
 // localhost
-# @hostname = localhost:3000
-@hostname = hero-service.onrender.com
+@hostname = localhost:3000
+#@hostname = hero-service.onrender.com
 
 @id = 38
 @createUpdateDeleteId = 731
