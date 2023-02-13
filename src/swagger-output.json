@@ -192,6 +192,19 @@
           "example": "Grogu"
         }
       }
+    },
+    "hero": {
+      "type": "object",
+      "properties": {
+        "example": {
+          "type": "object",
+          "properties": {}
+        }
+      }
+    },
+    "user": {
+      "type": "object",
+      "properties": {}
     }
   },
   "components": {

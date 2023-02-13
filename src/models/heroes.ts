@@ -1,5 +1,6 @@
-const mongoose = require('mongoose');
-const heroSchema = new mongoose.Schema (
+import mongoose, { Schema } from 'mongoose';
+
+const heroSchema = new Schema (
     {
         heroId: { type: Number, required: true },
         heroName: { type: String, required: true},
@@ -28,7 +29,7 @@ const heroSchema = new mongoose.Schema (
           eye_color: { type: String, required: true },
           hair_color: { type: String, required: true }
         },
-        work: { occupation: { type: String, required: true }, 
+        work: { occupation: { type: String, required: true },
                 base: { type: String, required: true } },
         connections: {
           group_affiliation: { type: String, required: true },
@@ -36,11 +37,12 @@ const heroSchema = new mongoose.Schema (
         },
         image: {
           url: { type: String, required: true }
-        }
-      },
-        { retainKeyOrder: true })
+        },
+        example: { required: false}
+    },
+)
 
-const addHeroExample = 
+const addHeroExample =
   {
     heroName: "Baby Yoda",
     powerstats: {
@@ -78,5 +80,9 @@ const addHeroExample =
     }
   }
 
-heroModel = mongoose.model('hero', heroSchema, 'heroes');        
-module.exports = {heroModel, addHeroExample}
+const heroModel = mongoose.model('hero', heroSchema, 'heroes');
+
+export const example = addHeroExample;
+export const schema = heroModel.schema;
+export default heroModel;
+

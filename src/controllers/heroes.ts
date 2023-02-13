@@ -1,12 +1,14 @@
-const ObjectId = require('mongodb').ObjectId;
-const { default: mongoose } = require('mongoose');
-const Hero = require('../models/heroes').heroModel;
-const User = require('../models/users')
+import heroModel from '../models/heroes';
+import userModel from '../models/users';
+
+const Hero = heroModel;
+const User = userModel;
+
 const contentText = 'text/plain';
 const contentJson = 'application/json';
 
 // gets names and ids for all heroes
-async function getNamesAndIds(req, res) {
+export async function getNamesAndIds(_req: any, res: any) {
     try {
         const Heroes = await Hero.find({}).select(['heroId','heroName','-_id']);
         setHeaders(res, contentJson);
@@ -15,23 +17,23 @@ async function getNamesAndIds(req, res) {
     } catch (error) {
         setHeaders(res, contentText);
         res.status(500).send(`${error}`);
-        }  
+        }
 }
 
 // gets one contact from database depending on id provided
-async function getHero(req, res) {
+export async function getHero(_req: any, res: any) {
     try {
-        //get id from request object
-        const heroId = parseInt(req.params.id);
-        
-        const result = await Hero.find({ 'heroId': heroId }); 
+        // get id from request object
+        const heroId = Number(_req.params.id);
+
+        const result = await Hero.find({ 'heroId': heroId });
 
         // no result - not a valid id
-        if (result == null || result.length == 0) {
+        if (result === null || result.length === 0) {
             setHeaders(res, contentText);
             res.status(404).send(result);
         } else {
-            //return data
+            // return data
             setHeaders(res, contentJson);
             res.status(200).send(result[0]);
         }
@@ -42,18 +44,17 @@ async function getHero(req, res) {
 }
 
 // creates a new hero with the data provided
-async function createNewHero(req, res) {
+export async function createNewHero(_req: any, res: any) {
     try {
-        if (await getPrivData(req.oidc.user.sub,'create')) {
+        if (await getPrivData(_req.oidc.user.sub,'create')) {
 
-            //get new hero data from request object
+            // get new hero data from request object
             try {
-                const newHero = new Hero(req.body);
+                const newHero = new Hero(_req.body);
 
                 // get new id number
                 const newId = await Hero.find({}).sort({ heroId: -1 }).limit(1);
-                newHero['heroId'] = newId[0]['heroId'] + 1;
-                let heroName = '', id = 0;
+                newHero.heroId = newId[0].heroId + 1;
 
                 // create user in database
                 try {
@@ -65,10 +66,10 @@ async function createNewHero(req, res) {
                     res.status(422).send(`Bad data. ${error}`);
                     return;
                 }
-            
+
                 // success
                 setHeaders(res, contentText);
-                res.status(201).send(`New Hero: ${newHero['heroName']}, Id: ${newHero['heroId']}`);
+                res.status(201).send(`New Hero: ${newHero.heroName}, Id: ${newHero.heroId}`);
 
             // catch unknown errors
             } catch (error) {
@@ -79,7 +80,7 @@ async function createNewHero(req, res) {
         // failed authoriation for user
         } else {
             setHeaders(res, contentText);
-            res.status(403).send("Incorrect permissions.");    
+            res.status(403).send("Incorrect permissions.");
         }
     } catch (error) {
         res.status(500).send(`${error}`);
@@ -87,24 +88,23 @@ async function createNewHero(req, res) {
 }
 
 // replaces a hero based on the id provided
-async function updateHero(req, res) {
+export async function updateHero(_req: any, res: any) {
     try {
-        if (await getPrivData(req.oidc.user.sub, 'update')) {
-            //get id from request object
-            const heroId = parseInt(req.params.id);
-            
-            //get new hero data from request object
-            const updatedHero = req.body;
+        if (await getPrivData(_req.oidc.user.sub, 'update')) {
+            // get id from request object
+            const heroId = Number(_req.params.id);
+
+            // get new hero data from request object
+            const updatedHero = _req.body;
             let result = null;
-            
+
             // update User
             try {
-                updatedHero['heroId'] = heroId;
+                updatedHero.heroId = heroId;
 
                 // validate hero against model
-                const hero = new Hero(updatedHero)
                 result = await Hero.updateOne({ heroId: { $eq: heroId } }, updatedHero, { runValidators: true });
-                
+
             } catch (error) {
                 setHeaders(res, contentText);
                 res.status(422).send(`Bad data. ${error}`);
@@ -117,7 +117,7 @@ async function updateHero(req, res) {
                 modifiedCount = result.modifiedCount
             }
             // if we don't have a result or the modifiedCount is 0 set the status code to 404
-            if (result === null || modifiedCount == 0 ) {
+            if (result === null || modifiedCount === 0 ) {
                 statusCode = 404
             } else {
                 statusCode = 200
@@ -127,7 +127,7 @@ async function updateHero(req, res) {
 
         } else {
             setHeaders(res, contentText);
-            res.status(403).send("Incorrect permissions.");    
+            res.status(403).send("Incorrect permissions.");
         }
      } catch (error) {
         res.status(500).send(`${error}`);
@@ -135,16 +135,16 @@ async function updateHero(req, res) {
 }
 
 // delete one here from database depending on id provided
-async function deleteHero(req, res) {
+export async function deleteHero(_req: any, res: any) {
     try {
-        if (await getPrivData(req.oidc.user.sub, 'delete')) {
+        if (await getPrivData(_req.oidc.user.sub, 'delete')) {
 
-            //get id from request object
-            const heroId = parseInt(req.params.id);
-            let result = '';
-            
-            //delete
-            try {       
+            // get id from request object
+            const heroId = Number(_req.params.id);
+            let result: any = null;
+
+            // delete
+            try {
                 result = await Hero.deleteOne({heroId: {$eq: heroId}});
             } catch (error) {
                 setHeaders(res, contentText);
@@ -153,7 +153,7 @@ async function deleteHero(req, res) {
             }
             // if deletedCount is 0 set the status code to 404
             let statusCode = 0;
-            if (result.deletedCount == 0) {
+            if (result.deletedCount === 0) {
                 statusCode = 404
             } else {
                 statusCode = 200
@@ -163,7 +163,7 @@ async function deleteHero(req, res) {
 
         // failed permissions
         } else {
-            res.status(403).send("Incorrect permissions.");    
+            res.status(403).send("Incorrect permissions.");
         }
         } catch (error) {
         res.status(500).send(`${error}`);
@@ -171,29 +171,27 @@ async function deleteHero(req, res) {
 }
 
 // sets the headers for the response
-function setHeaders(res, contentType) {
+function setHeaders(res: any, contentType: string) {
     res.setHeader('Content-Type', contentType);
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Z-Key');
     res.setHeader('Access-Control-Allow-Credentials', true);
-    
+
 }
 
-async function getPrivData(sub,priv) {
+async function getPrivData(sub: string, priv: string) {
     try {
         const userPrivs = await User.findOne({ user_id: sub });
         if (userPrivs != null) {
-            return userPrivs.privileges[priv];
+            return userPrivs?.privileges?[priv] ?? false: Boolean;
         } else {
             console.log("User not found.");
             return false;
         }
-    
+
     } catch (error) {
-        console.log(`${error}`)        
+        console.log(`${error}`)
         return false;
     }
 }
-
-  module.exports = { getNamesAndIds, getHero, createNewHero, updateHero, deleteHero } ;
