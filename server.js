@@ -47,6 +47,18 @@ const config = {
     issuerBaseURL: process.env.ISSUER_BASE_URL
   };
   
+
+const optionData = {
+    validatorUrl : null,
+	oauth2: {
+	 clientId: process.env.CLIENT_ID,
+	 clientSecret: process.env.SECRET,
+	 realm: "",
+	 appName: "Heroes API",
+	 scopeSeparator: ",",
+	 additionalQueryStringParams: {}
+       }
+}
 app.use(auth(config));
 
 // logger
@@ -57,7 +69,7 @@ app.use(cors());
 app.use(express.json());
 
 // swagger
-app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerSpec));
+app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerSpec,optionData));
 
 app.use('/', require('./routes/heroes'));
 

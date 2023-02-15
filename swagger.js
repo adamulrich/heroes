@@ -2,41 +2,51 @@ const swaggerAutogen = require('swagger-autogen')();
 
 const doc = {
   info: {
-    version: '',      
-    title: 'HEROES REST API', 
-    description: '',  
+    version: '',
+    title: 'HEROES REST API',
+    description: '',
   },
-  host: '',      
-  basePath: '',  
-  schemes: [],   
-  consumes: [],  
-  produces: [],  
-  tags: [        
+  host: '',
+  basePath: '',
+  servers: [
+    { url: "http://localhost:3000" },
+    { url: "https://hero-service.onrender.com" }
+  ],
+    
+  schemes: [],
+  consumes: [],
+  produces: [],
+  tags: [
     {
-      name: '',         
-      description: '',  
+      name: '',
+      description: '',
     },
   ],
-  securityDefinitions: {}, 
   components: {
-    securitySchemes: {
-      oAuth2Implicit: {
-        type: 'oauth2',
-        flow: 'implicit',
-        scopes: {
-          read: 'Grant read-only access to all your data except for the account and user info',
-          write: 'Grant write-only access to all your data except for the account and user info',
-          profile: 'Grant read-only access to the account and user info only'
+    "securitySchemes": {
+      "oAuth2Implicit": {
+        "type": "oauth2",
+        "description": "For more information, see https://developers.getbase.com/docs/rest/articles/oauth2/requests",
+        "flows": {
+          "implicit": {
+            "authorizationUrl": "https://dev-vukawrenb1tvjct0.us.auth0.com/authorize",
+            "scopes": {
+              "read": "Grant read-only access to all your data except for the account and user info",
+              "write": "Grant write-only access to all your data except for the account and user info",
+              "profile": "Grant read-only access to the account and user info only"
+            }
+          }
         }
       }
     }
   },
-  security: {
-    oAuth2Implicit: {
-      write: 'write',
-      read: 'read'
-    }
-  },
+  security: [
+    {
+      "oAuth2Implicit":
+        ["write",
+          "read"
+        ] 
+    }], 
   definitions: {
     heroNameAndId: {
       id: 0,

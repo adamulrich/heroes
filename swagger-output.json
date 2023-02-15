@@ -6,6 +6,14 @@
     "description": ""
   },
   "host": "",
+  "servers": [
+    {
+      "url": "http://localhost:3000"
+    },
+    {
+      "url": "https://hero-service.onrender.com"
+    }
+  ],
   "basePath": "",
   "tags": [
     {
@@ -14,7 +22,6 @@
     }
   ],
   "schemes": [],
-  "securityDefinitions": {},
   "paths": {
     "/hero-names-and-ids": {
       "get": {
@@ -198,19 +205,26 @@
     "securitySchemes": {
       "oAuth2Implicit": {
         "type": "oauth2",
-        "flow": "implicit",
-        "scopes": {
-          "read": "Grant read-only access to all your data except for the account and user info",
-          "write": "Grant write-only access to all your data except for the account and user info",
-          "profile": "Grant read-only access to the account and user info only"
+        "description": "For more information, see https://developers.getbase.com/docs/rest/articles/oauth2/requests",
+        "flows": {
+          "implicit": {
+            "authorizationUrl": "https://dev-vukawrenb1tvjct0.us.auth0.com/authorize",
+            "scopes": {
+              "read": "Grant read-only access to all your data except for the account and user info",
+              "write": "Grant write-only access to all your data except for the account and user info",
+              "profile": "Grant read-only access to the account and user info only"
+            }
+          }
         }
       }
     }
   },
-  "security": {
-    "oAuth2Implicit": {
-      "write": "write",
-      "read": "read"
+  "security": [
+    {
+      "oAuth2Implicit": [
+        "write",
+        "read"
+      ]
     }
-  }
+  ]
 }
