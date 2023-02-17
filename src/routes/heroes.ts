@@ -1,19 +1,28 @@
+import path from 'path';
 
-const router = require('express').Router();
-const dataController = require('../controllers/heroes');
+// router
+import Router from 'express';
+const router = Router();
+
+// controller
+import {getNamesAndIds, getHero, createNewHero, updateHero, deleteHero } from '../controllers/heroes';
+router.set("view engine", "ejs");
+router.set("views", path.join(__dirname, "../views"));
 
 // req.isAuthenticated is provided from the auth router
-router.get('/', (req, res) => {
+router.get('/', (_req: any, res: any) => {
     // #swagger.ignore = true
-    if (req.oidc.isAuthenticated()) {
-        res.render('profile', {
+    console.log(_req.app.get('views'));
+    if (_req.oidc.isAuthenticated()) {
+
+        res.render( 'profile.ejs', {
             title: 'Profile',
-            image: req.oidc.user.picture,
-            name: req.oidc.user.name,
-            user_id: req.oidc.user.sub
+            image: _req.oidc.user.picture,
+            name: _req.oidc.user.name,
+            user_id: _req.oidc.user.sub
         });
   } else {
-        res.render('profile', {
+        res.render('profile.ejs', {
             title: 'Profile',
             image: '',
             name: 'Not logged in.',
@@ -22,7 +31,7 @@ router.get('/', (req, res) => {
   }
 })
 
-router.get('/hero-names-and-ids', 
+router.get('/hero-names-and-ids',
     // #swagger.summary = 'returns all the hero names and their ids'
     // #swagger.description = 'returns all the hero names and their ids'
     /* #swagger.responses[200] = {
@@ -31,9 +40,9 @@ router.get('/hero-names-and-ids',
              }
     }
     */
-    dataController.getNamesAndIds);
+    getNamesAndIds);
 
-router.get('/hero/:id', 
+router.get('/hero/:id',
     // #swagger.summary = 'returns hero based on id'
     // #swagger.description = 'returns hero based on id'
     /* #swagger.responses[200] = {
@@ -42,11 +51,11 @@ router.get('/hero/:id',
              }
     }
     */
-    dataController.getHero);
+    getHero);
 
 
-router.post('/hero', (req, res) => {
-    if (req.oidc.isAuthenticated()) {
+router.post('/hero', (_req: any, res: any) => {
+    if (_req.oidc.isAuthenticated()) {
         /* #swagger.security = [{
             "oAuth2Implicit": [
             "write"
@@ -65,16 +74,16 @@ router.post('/hero', (req, res) => {
                 description: 'Add a user',
                 schema: { $ref: '#/definitions/hero' }
             } */
-            
-        dataController.createNewHero(req, res); 
+
+        createNewHero(_req, res);
     } else {
         res.status(401).send("not logged in");
     }
 });
 
 
-router.put("/hero/:id", (req, res) => {
-    if (req.oidc.isAuthenticated())
+router.put("/hero/:id", (_req: any, res: any) => {
+    if (_req.oidc.isAuthenticated())
     {
     // #swagger.summary = 'replaces a hero in the db based on ID'
     // #swagger.description = 'replaces a hero in the db based on ID'
@@ -82,21 +91,21 @@ router.put("/hero/:id", (req, res) => {
             description: 'OK',
              }
     }
-    */ 
+    */
     /*  #swagger.parameters['obj'] = {
                 in: 'body',
                 description: 'Replace hero info',
                 schema: { $ref: '#/definitions/hero' }
         } */
 
-        dataController.updateHero(req, res);
+        updateHero(_req, res);
     } else {
         res.status(401).send("not logged in");
     }
 });
 
-router.delete("/hero/:id", (req, res) => {
-    if (req.oidc.isAuthenticated()) {
+router.delete("/hero/:id", (_req: any, res: any) => {
+    if (_req.oidc.isAuthenticated()) {
     // #swagger.summary = 'deletes a hero from the db based on ID.'
     // #swagger.description = 'deletes a hero from the db based on ID.'
     // #swagger.parameters['id'] = { description: 'hero Id' }
@@ -105,15 +114,11 @@ router.delete("/hero/:id", (req, res) => {
              }
     }
     */
-        dataController.deleteHero(req, res);
+        deleteHero(_req, res);
     } else {
         res.status(401).send("not logged in");
     }
 });
 
 
-function canUpdate(sid) {
-    
-}
-
-module.exports = router;
+export default router;

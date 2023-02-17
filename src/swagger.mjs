@@ -1,23 +1,23 @@
-const swaggerAutogen = require('swagger-autogen')();
+import swaggerAutogen from 'swagger-autogen';
 
 const doc = {
   info: {
-    version: '',      
-    title: 'HEROES REST API', 
-    description: '',  
+    version: '',
+    title: 'HEROES REST API',
+    description: '',
   },
-  host: '',      
-  basePath: '',  
-  schemes: [],   
-  consumes: [],  
-  produces: [],  
-  tags: [        
+  host: '',
+  basePath: '',
+  schemes: {},
+  consumes: {},
+  produces: {},
+  tags: [
     {
-      name: '',         
-      description: '',  
+      name: '',
+      description: '',
     },
   ],
-  securityDefinitions: {}, 
+  securityDefinitions: {},
   components: {
     securitySchemes: {
       oAuth2Implicit: {
@@ -41,11 +41,15 @@ const doc = {
     heroNameAndId: {
       id: 0,
       name: "Grogu"
-    }
+    },
+    hero: { 
+      example: {}
+    },
+    user: {}
   }
 };
 
-const outputFile = './swagger-output.json';
-const endpointsFiles = ['./server.js'];
+const outputFile = './src/swagger-output.json';
+const endpointsFiles = ['./src/server.ts'];
 
 swaggerAutogen(outputFile, endpointsFiles, doc);

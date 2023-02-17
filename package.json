@@ -1,13 +1,17 @@
 {
+  "main": "dist/server.js",
+  "scripts": {
+    "prebuild": "npm install && tslint -c tslint.json -p tsconfig.json",
+    "build": "tsc",
+    "prestart": "npm run build && gulp && npm run swagger-autogen",
+    "start": "node dist/server.js",
+    "test": "nodemon ./dist/server.js",
+    "swagger-autogen": "node ./src/swagger.mjs"
+  },
   "name": "heroes",
   "version": "1.0.0",
   "description": "",
-  "main": "server.js",
-  "scripts": {
-    "test": "nodemon server.js",
-    "build": "npm install && node swagger.js",
-    "swagger-autogen": "node swagger.js"
-  },
+  "type": "commonjs",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/adamulrich/heroes.git"
@@ -19,6 +23,10 @@
   },
   "homepage": "https://github.com/adamulrich/heroes#readme",
   "dependencies": {
+    "@types/cors": "^2.8.13",
+    "@types/mongoose": "^5.11.97",
+    "@types/morgan": "^1.9.4",
+    "@types/swagger-ui-express": "^4.1.3",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "ejs": "^3.1.8",
@@ -31,11 +39,23 @@
     "mongoose": "^6.9.0",
     "mongoose-to-swagger": "^1.4.0",
     "morgan": "~1.10.0",
+    "nano": "^10.1.2",
     "node": "^18.13.0",
+    "run": "^1.4.0",
     "swagger-autogen": "^2.22.0",
     "swagger-ui-express": "^4.6.0"
   },
   "devDependencies": {
-    "nodemon": "^2.0.20"
+    "@tsconfig/node-lts-strictest-esm": "^18.12.1",
+    "@types/express": "^4.17.17",
+    "@types/gulp-typescript": "^2.13.0",
+    "@types/node": "^18.13.0",
+    "del": "^7.0.0",
+    "gulp": "^4.0.2",
+    "gulp-typescript": "^2.12.2",
+    "nodemon": "^2.0.20",
+    "ts-node": "^10.9.1",
+    "tslint": "^6.1.3",
+    "typescript": "^4.9.5"
   }
 }

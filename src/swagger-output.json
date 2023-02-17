@@ -13,8 +13,10 @@
       "description": ""
     }
   ],
-  "schemes": [],
+  "schemes": {},
   "securityDefinitions": {},
+  "consumes": {},
+  "produces": {},
   "paths": {
     "/hero-names-and-ids": {
       "get": {
@@ -192,6 +194,19 @@
           "example": "Grogu"
         }
       }
+    },
+    "hero": {
+      "type": "object",
+      "properties": {
+        "example": {
+          "type": "object",
+          "properties": {}
+        }
+      }
+    },
+    "user": {
+      "type": "object",
+      "properties": {}
     }
   },
   "components": {
