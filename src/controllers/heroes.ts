@@ -1,3 +1,4 @@
+
 import heroModel from '../models/heroes';
 import userModel from '../models/users';
 
@@ -137,7 +138,9 @@ export async function updateHero(_req: any, res: any) {
 // delete one here from database depending on id provided
 export async function deleteHero(_req: any, res: any) {
     try {
-        if (await getPrivData(_req.oidc.user.sub, 'delete')) {
+        const deletePriv = await getPrivData(_req.oidc.user.sub, 'delete');
+        console.log(`Delete Priv: ${deletePriv}`);
+        if (deletePriv) {
 
             // get id from request object
             const heroId = Number(_req.params.id);
@@ -180,11 +183,14 @@ function setHeaders(res: any, contentType: string) {
 
 }
 
+// const privileges: privilegeType = { 1: 'create', 2: 'read', 3: 'update', 4: 'delete' }
+
 async function getPrivData(sub: string, priv: string) {
     try {
         const userPrivs = await User.findOne({ user_id: sub });
         if (userPrivs != null) {
-            return userPrivs?.privileges?[priv] ?? false: Boolean;
+            // @ts-ignore
+            return userPrivs.privileges[priv];
         } else {
             console.log("User not found.");
             return false;
