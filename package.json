@@ -3,7 +3,7 @@
   "scripts": {
     "prebuild": "tslint -c tslint.json -p tsconfig.json",
     "build": "tsc",
-    "prestart": "npm run build && gulp && npm run swagger-autogen",
+    "prestart": "npm install & npm run build && gulp && npm run swagger-autogen",
     "start": "node dist/server.js",
     "test": "nodemon ./dist/server.js",
     "swagger-autogen": "node ./src/swagger.mjs"
