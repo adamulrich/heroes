@@ -1,9 +1,9 @@
-// @ts-nocheck
 
 // dotenv
 import path from 'path';
 import dotenv from 'dotenv';
 dotenv.config();
+
 
 /* tslint:disable:no-string-literal */
 const port = process.env['HTTP_PORT'] ?? 3000;
@@ -26,9 +26,12 @@ const userSchema = m2s(userModel);
 
 import swaggerSpec from '../src/swagger-output.json';
 
+
+// @ts-ignore
 swaggerSpec.definitions.hero = heroSchema;
-/* tslint:disable:no-string-literal */
+// @ts-ignore
 swaggerSpec.definitions.hero.example = addHeroExample;
+// @ts-ignore
 swaggerSpec.definitions.user = userSchema;
 
 // express
@@ -43,7 +46,8 @@ app.use(express.static(path.join(__dirname, "public")));
 // attach login/logout/ /callback
 import { auth } from 'express-openid-connect';
 
-/* tslint:disable:no-string-literal */
+
+
 const config = {
     authRequired: false,
     auth0Logout: true,
