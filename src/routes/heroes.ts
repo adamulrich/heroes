@@ -1,3 +1,4 @@
+import path from 'path';
 
 // router
 import Router from 'express';
@@ -5,20 +6,23 @@ const router = Router();
 
 // controller
 import {getNamesAndIds, getHero, createNewHero, updateHero, deleteHero } from '../controllers/heroes';
-
+router.set("view engine", "ejs");
+router.set("views", path.join(__dirname, "../views"));
 
 // req.isAuthenticated is provided from the auth router
 router.get('/', (_req: any, res: any) => {
     // #swagger.ignore = true
+    console.log(_req.app.get('views'));
     if (_req.oidc.isAuthenticated()) {
-        res.render('profile', {
+
+        res.render( 'profile.ejs', {
             title: 'Profile',
             image: _req.oidc.user.picture,
             name: _req.oidc.user.name,
             user_id: _req.oidc.user.sub
         });
   } else {
-        res.render('profile', {
+        res.render('profile.ejs', {
             title: 'Profile',
             image: '',
             name: 'Not logged in.',

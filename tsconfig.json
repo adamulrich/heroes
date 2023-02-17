@@ -11,6 +11,7 @@
         "moduleResolution": "node",
         "sourceMap": true,
         "outDir": "dist",
+        "rootDir": "./src",
         "baseUrl": ".",
         "paths": {
             "*": [
@@ -19,9 +20,8 @@
         }
     },
     "include": [
-        "src/**/*"
+        "src/**/*.ts"
     ],
     "$schema": "https://json.schemastore.org/tsconfig",
-    "extends": "@tsconfig/node-lts-strictest-esm/tsconfig.json",
-
+    "extends": "@tsconfig/node-lts-strictest-esm/tsconfig.json"
 }

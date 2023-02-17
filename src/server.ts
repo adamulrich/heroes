@@ -1,5 +1,7 @@
+// @ts-nocheck
 
 // dotenv
+import path from 'path';
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -12,35 +14,31 @@ import logger from 'morgan';
 // db models
 import { getDb } from './db/mongoose';
 import heroModel from './models/heroes';
-// import { example} from './models/heroes';
-// import userModel from './models/users';
+import { example} from './models/heroes';
+import userModel from './models/users';
 
 import m2s from 'mongoose-to-swagger';
 
 // swagger
 const heroSchema = m2s(heroModel);
-// const addHeroExample = example;
-// const userSchema = m2s(userModel);
+const addHeroExample = example;
+const userSchema = m2s(userModel);
 
 import swaggerSpec from '../src/swagger-output.json';
 
 swaggerSpec.definitions.hero = heroSchema;
 /* tslint:disable:no-string-literal */
-// swaggerSpec.definitions.hero.example = addHeroExample;
-// swaggerSpec.definitions.user = userSchema;
+swaggerSpec.definitions.hero.example = addHeroExample;
+swaggerSpec.definitions.user = userSchema;
 
 // express
 import express from 'express';
 
 const app = express();
 
-
-// views
-app.set('views', 'src/views');
-app.set('view engine', 'ejs');
+// static paths and encoding
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static('public'));
-
+app.use(express.static(path.join(__dirname, "public")));
 
 // attach login/logout/ /callback
 import { auth } from 'express-openid-connect';
@@ -68,7 +66,6 @@ app.use(express.json());
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerSpec));
 
 import routes from './routes/heroes.js';
-
 app.use('/', routes);
 
 app.use((_req: any, res: any ) => {
@@ -91,3 +88,4 @@ app.listen(port, async () => {
     }
 })
 
+module.exports = app;
