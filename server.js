@@ -59,7 +59,9 @@ app.use(express.json());
 // swagger
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerSpec));
 
-app.use('/', require('./routes/heroes'));
+const router = require('./routes/heroes');
+
+app.use('/', router);
 
 app.use((req, res, next) => {
     res.setHeader('Content-Type', 'application/json');
@@ -72,11 +74,13 @@ app.use((req, res, next) => {
 //start
 app.listen(port, async (res, req) => {
     
-    console.log(`App listening at ${process.env.BASE_URL}`)
+    // console.log(`App listening at ${process.env.BASE_URL}`)
     try {
         const db = await mongoose.getDb();
-        console.log("connected via mongoose to mongo db");
+        // console.log("connected via mongoose to mongo db");
     } catch (error) {
         console.log(error);
     }
 })
+
+module.exports = { app };
